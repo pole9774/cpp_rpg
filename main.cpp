@@ -15,7 +15,7 @@ int main() {
             << "- INT: " << p1.getIntelligence() << "\n";
         
         if (i < 9) {
-            p1.gainExp(100);
+            p1.gainExp(i * 100);
         }
     }
 
