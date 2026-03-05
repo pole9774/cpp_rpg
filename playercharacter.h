@@ -53,6 +53,17 @@ class Warrior : public PlayerCharacterDelegate {
         void levelUp() override;
 };
 
+class Wizard : public PlayerCharacterDelegate {
+
+    public:
+        Wizard();
+
+        std::string getClassName() override;
+
+    private:
+        void levelUp() override;
+};
+
 class PlayerCharacter {
 
     public:
