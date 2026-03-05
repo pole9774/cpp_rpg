@@ -1,0 +1,75 @@
+#include "playercharacter.h"
+
+PlayerCharacterDelegate::PlayerCharacterDelegate() : StatBlock(0, 0) {
+    level = 1;
+    exp = 0;
+    exp_to_next_level = EXP_FOR_LEVEL2;
+    HP = std::make_unique<PointWell>();
+}
+
+void PlayerCharacterDelegate::gainExp(unsigned int gained_exp) {
+    exp += gained_exp;
+    while (checkLevelUp()) {}
+}
+
+unsigned int PlayerCharacterDelegate::getLevel() {
+    return level;
+}
+
+unsigned int PlayerCharacterDelegate::getEXP() {
+    return exp;
+}
+
+unsigned int PlayerCharacterDelegate::getEXPToNextLevel() {
+    return exp_to_next_level;
+}
+
+bool PlayerCharacterDelegate::checkLevelUp() {
+    if (exp >= exp_to_next_level) {
+        level++;
+        levelUp();
+        exp_to_next_level *= LEVELSCALAR;
+        return true;
+    }
+
+    return false;
+}
+
+Cleric::Cleric() : PlayerCharacterDelegate() {
+    HP->setMax(CLERIC_BASEHP);
+    HP->increaseCurrent(CLERIC_BASEHP);
+    increaseStats(CLERIC_BASESTR, CLERIC_BASEINT);
+}
+
+std::string Cleric::getClassName() {
+    return std::string("Cleric");
+}
+
+void Cleric::levelUp() {
+    HP->setMax((unsigned int)(CLERIC_BASEHP / 2.0) + HP->getMax());
+    HP->increaseCurrent((unsigned int)(CLERIC_BASEHP / 2.0));
+    increaseStats(CLERIC_BASESTR, CLERIC_BASEINT);
+}
+
+Warrior::Warrior() : PlayerCharacterDelegate() {
+    HP->setMax(WARRIOR_BASEHP);
+    HP->increaseCurrent(WARRIOR_BASEHP);
+    increaseStats(WARRIOR_BASESTR, WARRIOR_BASEINT);
+}
+
+std::string Warrior::getClassName() {
+    return std::string("Warrior");
+}
+
+void Warrior::levelUp() {
+    HP->setMax((unsigned int)(WARRIOR_BASEHP / 2.0) + HP->getMax());
+    HP->increaseCurrent((unsigned int)(WARRIOR_BASEHP / 2.0));
+    increaseStats(WARRIOR_BASESTR, WARRIOR_BASEINT);
+}
+
+PlayerCharacter::PlayerCharacter(PlayerCharacterDelegate *pc) : pcclass(pc) {}
+
+PlayerCharacter::~PlayerCharacter() {
+    delete pcclass;
+    pcclass = nullptr;
+}
