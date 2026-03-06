@@ -74,7 +74,7 @@ void Warrior::levelUp() {
 }
 
 
-//Wizard
+// Wizard
 
 Wizard::Wizard() : PlayerCharacterDelegate() {
     HP->setMax(WIZARD_BASEHP);
