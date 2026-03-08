@@ -3,7 +3,7 @@
 
 int main() {
 
-    PlayerCharacter p1(new Wizard());
+    PlayerCharacter p1(std::make_unique<Warrior>());
 
     for (int i = 0; i < 10; i++) {
         std::cout

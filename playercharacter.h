@@ -21,7 +21,7 @@ class PlayerCharacterDelegate : public StatBlock {
         virtual void levelUp() = 0;
         virtual std::string getClassName() = 0;
 
-        std::unique_ptr<PointWell> HP;
+        PointWell HP;
 
     protected:
         unsigned int level;
@@ -68,21 +68,21 @@ class PlayerCharacter {
 
     public:
         PlayerCharacter() = delete;
-        PlayerCharacter(PlayerCharacterDelegate *pc);
-        ~PlayerCharacter();
+        PlayerCharacter(std::unique_ptr<PlayerCharacterDelegate> pc);
+        ~PlayerCharacter() = default;
 
         void gainExp(unsigned int gained_exp) { pcclass->gainExp(gained_exp); }
         unsigned int getLevel() { return pcclass->getLevel(); }
         unsigned int getEXP() { return pcclass->getEXP(); }
         unsigned int getEXPToNextLevel() { return pcclass->getEXPToNextLevel(); }
         std::string getClassName() { return pcclass->getClassName(); }
-        unsigned int getCurrentHP() { return pcclass->HP->getCurrent(); }
-        unsigned int getMaxHP() { return pcclass->HP->getMax(); }
+        unsigned int getCurrentHP() { return pcclass->HP.getCurrent(); }
+        unsigned int getMaxHP() { return pcclass->HP.getMax(); }
         unsigned int getStrength() { return pcclass->getStrength(); }
         unsigned int getIntelligence() { return pcclass->getIntelligence(); }
-        void takeDamage(unsigned int damage) { pcclass->HP->reduceCurrent(damage); }
-        void heal(unsigned int amount) { pcclass->HP->increaseCurrent(amount); }
+        void takeDamage(unsigned int damage) { pcclass->HP.reduceCurrent(damage); }
+        void heal(unsigned int amount) { pcclass->HP.increaseCurrent(amount); }
 
     private:
-        PlayerCharacterDelegate *pcclass;
+        std::unique_ptr<PlayerCharacterDelegate> pcclass;
 };

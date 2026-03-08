@@ -1,10 +1,9 @@
 #include "playercharacter.h"
 
-PlayerCharacterDelegate::PlayerCharacterDelegate() : StatBlock(0, 0) {
+PlayerCharacterDelegate::PlayerCharacterDelegate() : StatBlock(0, 0), HP() {
     level = 1;
     exp = 0;
     exp_to_next_level = EXP_FOR_LEVEL2;
-    HP = std::make_unique<PointWell>();
 }
 
 void PlayerCharacterDelegate::gainExp(unsigned int gained_exp) {
@@ -39,8 +38,8 @@ bool PlayerCharacterDelegate::checkLevelUp() {
 // Cleric
 
 Cleric::Cleric() : PlayerCharacterDelegate() {
-    HP->setMax(CLERIC_BASEHP);
-    HP->increaseCurrent(CLERIC_BASEHP);
+    HP.setMax(CLERIC_BASEHP);
+    HP.increaseCurrent(CLERIC_BASEHP);
     increaseStats(CLERIC_BASESTR, CLERIC_BASEINT);
 }
 
@@ -49,8 +48,8 @@ std::string Cleric::getClassName() {
 }
 
 void Cleric::levelUp() {
-    HP->setMax((unsigned int)(CLERIC_BASEHP / 2.0) + HP->getMax());
-    HP->increaseCurrent((unsigned int)(CLERIC_BASEHP / 2.0));
+    HP.setMax((unsigned int)(CLERIC_BASEHP / 2.0) + HP.getMax());
+    HP.increaseCurrent((unsigned int)(CLERIC_BASEHP / 2.0));
     increaseStats(CLERIC_BASESTR, CLERIC_BASEINT);
 }
 
@@ -58,8 +57,8 @@ void Cleric::levelUp() {
 // Warrior
 
 Warrior::Warrior() : PlayerCharacterDelegate() {
-    HP->setMax(WARRIOR_BASEHP);
-    HP->increaseCurrent(WARRIOR_BASEHP);
+    HP.setMax(WARRIOR_BASEHP);
+    HP.increaseCurrent(WARRIOR_BASEHP);
     increaseStats(WARRIOR_BASESTR, WARRIOR_BASEINT);
 }
 
@@ -68,8 +67,8 @@ std::string Warrior::getClassName() {
 }
 
 void Warrior::levelUp() {
-    HP->setMax((unsigned int)(WARRIOR_BASEHP / 2.0) + HP->getMax());
-    HP->increaseCurrent((unsigned int)(WARRIOR_BASEHP / 2.0));
+    HP.setMax((unsigned int)(WARRIOR_BASEHP / 2.0) + HP.getMax());
+    HP.increaseCurrent((unsigned int)(WARRIOR_BASEHP / 2.0));
     increaseStats(WARRIOR_BASESTR, WARRIOR_BASEINT);
 }
 
@@ -77,8 +76,8 @@ void Warrior::levelUp() {
 // Wizard
 
 Wizard::Wizard() : PlayerCharacterDelegate() {
-    HP->setMax(WIZARD_BASEHP);
-    HP->increaseCurrent(WIZARD_BASEHP);
+    HP.setMax(WIZARD_BASEHP);
+    HP.increaseCurrent(WIZARD_BASEHP);
     increaseStats(WIZARD_BASESTR, WIZARD_BASEINT);
 }
 
@@ -87,15 +86,11 @@ std::string Wizard::getClassName() {
 }
 
 void Wizard::levelUp() {
-    HP->setMax((unsigned int)(WIZARD_BASEHP / 2.0) + HP->getMax());
-    HP->increaseCurrent((unsigned int)(WIZARD_BASEHP / 2.0));
+    HP.setMax((unsigned int)(WIZARD_BASEHP / 2.0) + HP.getMax());
+    HP.increaseCurrent((unsigned int)(WIZARD_BASEHP / 2.0));
     increaseStats(WIZARD_BASESTR, WIZARD_BASEINT);
 }
 
 
-PlayerCharacter::PlayerCharacter(PlayerCharacterDelegate *pc) : pcclass(pc) {}
-
-PlayerCharacter::~PlayerCharacter() {
-    delete pcclass;
-    pcclass = nullptr;
-}
+PlayerCharacter::PlayerCharacter(std::unique_ptr<PlayerCharacterDelegate> pc)
+    : pcclass(std::move(pc)) {}
