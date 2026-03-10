@@ -85,6 +85,8 @@ class PlayerCharacter {
         std::string getClassName() { return pcclass->getClassName(); }
         unsigned int getCurrentHP() { return pcclass->HP.getCurrent(); }
         unsigned int getMaxHP() { return pcclass->HP.getMax(); }
+        unsigned int getBaseStrength() { return pcclass->getBaseStrength(); }
+        unsigned int getBaseIntelligence() { return pcclass->getBaseIntelligence(); }
         unsigned int getStrength() { return pcclass->getStrength(); }
         unsigned int getIntelligence() { return pcclass->getIntelligence(); }
         void takeDamage(unsigned int damage) { pcclass->HP.reduceCurrent(damage); }
