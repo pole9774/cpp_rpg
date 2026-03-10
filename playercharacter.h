@@ -1,9 +1,11 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 #include "constants.h"
 #include "statblock.h"
 #include "pointwell.h"
+#include "itemid.h"
 
 class PlayerCharacterDelegate : public StatBlock {
 
@@ -11,12 +13,15 @@ class PlayerCharacterDelegate : public StatBlock {
         PlayerCharacterDelegate();
 
         void gainExp(unsigned int gained_exp);
-
         unsigned int getLevel();
-
         unsigned int getEXP();
-
         unsigned int getEXPToNextLevel();
+
+        void addToBackpack(ItemId id);
+        void removeFromBackpack(ItemId id);
+        bool hasInBackpack(ItemId id) const;
+
+        const std::vector<ItemId>& getBackpack() const;
 
         virtual void levelUp() = 0;
         virtual std::string getClassName() = 0;
@@ -27,6 +32,8 @@ class PlayerCharacterDelegate : public StatBlock {
         unsigned int level;
         unsigned int exp;
         unsigned int exp_to_next_level;
+
+        std::vector<ItemId> backpack;
 
         bool checkLevelUp();
 };
@@ -82,6 +89,12 @@ class PlayerCharacter {
         unsigned int getIntelligence() { return pcclass->getIntelligence(); }
         void takeDamage(unsigned int damage) { pcclass->HP.reduceCurrent(damage); }
         void heal(unsigned int amount) { pcclass->HP.increaseCurrent(amount); }
+
+        void addToBackpack(ItemId id) { pcclass->addToBackpack(id); }
+        void removeFromBackpack(ItemId id) { pcclass->removeFromBackpack(id); }
+        bool hasInBackpack(ItemId id) const { return pcclass->hasInBackpack(id); }
+
+        const std::vector<ItemId>& getBackpack() const { return pcclass->getBackpack(); }
 
     private:
         std::unique_ptr<PlayerCharacterDelegate> pcclass;

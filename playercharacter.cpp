@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "playercharacter.h"
 
 PlayerCharacterDelegate::PlayerCharacterDelegate() : StatBlock(0, 0), HP() {
@@ -32,6 +33,22 @@ bool PlayerCharacterDelegate::checkLevelUp() {
     }
 
     return false;
+}
+
+void PlayerCharacterDelegate::addToBackpack(ItemId id) {
+    backpack.push_back(id);
+}
+
+void PlayerCharacterDelegate::removeFromBackpack(ItemId id) {
+    backpack.erase(std::remove(backpack.begin(), backpack.end(), id), backpack.end());
+}
+
+bool PlayerCharacterDelegate::hasInBackpack(ItemId id) const {
+    return std::find(backpack.begin(), backpack.end(), id) != backpack.end();
+}
+
+const std::vector<ItemId>& PlayerCharacterDelegate::getBackpack() const {
+    return backpack;
 }
 
 
