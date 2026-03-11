@@ -95,8 +95,10 @@ class PlayerCharacter {
         void addToBackpack(ItemId id) { pcclass->addToBackpack(id); }
         void removeFromBackpack(ItemId id) { pcclass->removeFromBackpack(id); }
         bool hasInBackpack(ItemId id) const { return pcclass->hasInBackpack(id); }
-
         const std::vector<ItemId>& getBackpack() const { return pcclass->getBackpack(); }
+
+        void addBuff(const Buff &new_buff) { pcclass->addBuff(new_buff); }
+        bool removeBuff(std::string_view buff_name) { return pcclass->removeBuff(buff_name); }
 
     private:
         std::unique_ptr<PlayerCharacterDelegate> pcclass;

@@ -39,6 +39,9 @@ void StatBlock::increaseStats(unsigned int strength_param, unsigned int intellig
 }
 
 void StatBlock::recalculate_buffs() {
+    total_strength_buff = 0;
+    total_intelligence_buff = 0;
+    
     for (auto &buff : buffs) {
         total_strength_buff += buff.getStrengthBuff();
         total_intelligence_buff += buff.getIntelligenceBuff();
