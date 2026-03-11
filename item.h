@@ -22,11 +22,12 @@ class ItemDelegate {
 class Potion : public ItemDelegate {
 
     public:
-        Potion(std::string_view name_param, unsigned int hp_heal_param, unsigned quantity_param);
+        Potion(std::string_view name_param, unsigned int hp_heal_param, unsigned int mp_heal_param, unsigned quantity_param);
 
         const char* getType() const override;
 
-        unsigned int getHealAmount() const;
+        unsigned int getHpHealAmount() const;
+        unsigned int getMpHealAmount() const;
         unsigned int getQuantity() const;
 
         void decreseQuantity();
@@ -35,6 +36,7 @@ class Potion : public ItemDelegate {
 
     private:
         unsigned int hp_heal;
+        unsigned int mp_heal;
         unsigned int quantity;
 };
 

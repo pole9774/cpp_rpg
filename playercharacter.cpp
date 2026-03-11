@@ -57,6 +57,8 @@ const std::vector<ItemId>& PlayerCharacterDelegate::getBackpack() const {
 Cleric::Cleric() : PlayerCharacterDelegate() {
     HP.setMax(CLERIC_BASEHP);
     HP.increaseCurrent(CLERIC_BASEHP);
+    MP.setMax(CLERIC_BASEMP);
+    MP.increaseCurrent(CLERIC_BASEMP);
     increaseStats(CLERIC_BASESTR, CLERIC_BASEINT);
 }
 
@@ -67,6 +69,8 @@ std::string Cleric::getClassName() {
 void Cleric::levelUp() {
     HP.setMax((unsigned int)(CLERIC_BASEHP / 2.0) + HP.getMax());
     HP.increaseCurrent((unsigned int)(CLERIC_BASEHP / 2.0));
+    MP.setMax((unsigned int)(CLERIC_BASEMP / 2.0) + MP.getMax());
+    MP.increaseCurrent((unsigned int)(CLERIC_BASEMP / 2.0));
     increaseStats(CLERIC_BASESTR, CLERIC_BASEINT);
 }
 
@@ -76,6 +80,8 @@ void Cleric::levelUp() {
 Warrior::Warrior() : PlayerCharacterDelegate() {
     HP.setMax(WARRIOR_BASEHP);
     HP.increaseCurrent(WARRIOR_BASEHP);
+    MP.setMax(WARRIOR_BASEMP);
+    MP.increaseCurrent(WARRIOR_BASEMP);
     increaseStats(WARRIOR_BASESTR, WARRIOR_BASEINT);
 }
 
@@ -86,6 +92,8 @@ std::string Warrior::getClassName() {
 void Warrior::levelUp() {
     HP.setMax((unsigned int)(WARRIOR_BASEHP / 2.0) + HP.getMax());
     HP.increaseCurrent((unsigned int)(WARRIOR_BASEHP / 2.0));
+    MP.setMax((unsigned int)(WARRIOR_BASEMP / 2.0) + MP.getMax());
+    MP.increaseCurrent((unsigned int)(WARRIOR_BASEMP / 2.0));
     increaseStats(WARRIOR_BASESTR, WARRIOR_BASEINT);
 }
 
@@ -95,6 +103,8 @@ void Warrior::levelUp() {
 Wizard::Wizard() : PlayerCharacterDelegate() {
     HP.setMax(WIZARD_BASEHP);
     HP.increaseCurrent(WIZARD_BASEHP);
+    MP.setMax(WIZARD_BASEMP);
+    MP.increaseCurrent(WIZARD_BASEMP);
     increaseStats(WIZARD_BASESTR, WIZARD_BASEINT);
 }
 
@@ -105,6 +115,8 @@ std::string Wizard::getClassName() {
 void Wizard::levelUp() {
     HP.setMax((unsigned int)(WIZARD_BASEHP / 2.0) + HP.getMax());
     HP.increaseCurrent((unsigned int)(WIZARD_BASEHP / 2.0));
+    MP.setMax((unsigned int)(WIZARD_BASEMP / 2.0) + MP.getMax());
+    MP.increaseCurrent((unsigned int)(WIZARD_BASEMP / 2.0));
     increaseStats(WIZARD_BASESTR, WIZARD_BASEINT);
 }
 

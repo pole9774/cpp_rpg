@@ -8,7 +8,7 @@
 class ItemManager {
 
     public:
-        ItemId createPotion(std::string_view name, unsigned int hp_heal_param, unsigned int quantity_param);
+        ItemId createPotion(std::string_view name, unsigned int hp_heal_param, unsigned int mp_heal_param, unsigned int quantity_param);
 
         Item* get(ItemId id);
         const Item* get(ItemId id) const;

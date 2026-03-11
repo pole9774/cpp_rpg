@@ -1,8 +1,8 @@
 #include "itemmanager.h"
 
-ItemId ItemManager::createPotion(std::string_view name, unsigned int hp_heal_param, unsigned int quantity_param) {
+ItemId ItemManager::createPotion(std::string_view name, unsigned int hp_heal_param, unsigned int mp_heal_param, unsigned int quantity_param) {
     ItemId id = next_id++;
-    items.emplace(id, std::make_unique<Item>(std::make_unique<Potion>(name, hp_heal_param, quantity_param)));
+    items.emplace(id, std::make_unique<Item>(std::make_unique<Potion>(name, hp_heal_param, mp_heal_param, quantity_param)));
     return id;
 }
 
@@ -29,7 +29,8 @@ bool ItemManager::useItem(ItemId id, PlayerCharacter *pc) {
     auto *potion = dynamic_cast<Potion*>(item->getData());
 
     if (potion) {
-        pc->heal(potion->getHealAmount());
+        pc->heal(potion->getHpHealAmount());
+        pc->increaseMP(potion->getMpHealAmount());
 
         potion->decreseQuantity();
 

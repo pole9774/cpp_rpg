@@ -8,15 +8,19 @@ std::string_view ItemDelegate::getName() const {
     return name;
 }
 
-Potion::Potion(std::string_view name_param, unsigned int hp_heal_param, unsigned quantity_param)
-    : ItemDelegate(name_param), hp_heal(hp_heal_param), quantity(quantity_param) {}
+Potion::Potion(std::string_view name_param, unsigned int hp_heal_param, unsigned int mp_heal_param, unsigned quantity_param)
+    : ItemDelegate(name_param), hp_heal(hp_heal_param), mp_heal(mp_heal_param), quantity(quantity_param) {}
 
 const char* Potion::getType() const {
     return "potion";
 }
 
-unsigned int Potion::getHealAmount() const {
+unsigned int Potion::getHpHealAmount() const {
     return hp_heal;
+}
+
+unsigned int Potion::getMpHealAmount() const {
+    return mp_heal;
 }
 
 unsigned int Potion::getQuantity() const {
@@ -38,7 +42,8 @@ const ItemDelegate* Item::getData() const {
 void Potion::print(std::ostream& os) const {
     os << getName()
        << " type=" << getType()
-       << " heal=" << hp_heal
+       << " hp_heal=" << hp_heal
+       << " mp_heal=" << mp_heal
        << " qty=" << quantity;
 }
 

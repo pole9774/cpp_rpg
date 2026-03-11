@@ -27,6 +27,7 @@ class PlayerCharacterDelegate : public StatBlock {
         virtual std::string getClassName() = 0;
 
         PointWell HP;
+        PointWell MP;
 
     protected:
         unsigned int level;
@@ -82,15 +83,23 @@ class PlayerCharacter {
         unsigned int getLevel() { return pcclass->getLevel(); }
         unsigned int getEXP() { return pcclass->getEXP(); }
         unsigned int getEXPToNextLevel() { return pcclass->getEXPToNextLevel(); }
+
         std::string getClassName() { return pcclass->getClassName(); }
+
         unsigned int getCurrentHP() { return pcclass->HP.getCurrent(); }
         unsigned int getMaxHP() { return pcclass->HP.getMax(); }
+        void takeDamage(unsigned int damage) { pcclass->HP.reduceCurrent(damage); }
+        void heal(unsigned int amount) { pcclass->HP.increaseCurrent(amount); }
+
+        unsigned int getCurrentMP() { return pcclass->MP.getCurrent(); }
+        unsigned int getMaxMP() { return pcclass->MP.getMax(); }
+        void consumeMP(unsigned int damage) { pcclass->MP.reduceCurrent(damage); }
+        void increaseMP(unsigned int amount) { pcclass->MP.increaseCurrent(amount); }
+
         unsigned int getBaseStrength() { return pcclass->getBaseStrength(); }
         unsigned int getBaseIntelligence() { return pcclass->getBaseIntelligence(); }
         unsigned int getStrength() { return pcclass->getStrength(); }
         unsigned int getIntelligence() { return pcclass->getIntelligence(); }
-        void takeDamage(unsigned int damage) { pcclass->HP.reduceCurrent(damage); }
-        void heal(unsigned int amount) { pcclass->HP.increaseCurrent(amount); }
 
         void addToBackpack(ItemId id) { pcclass->addToBackpack(id); }
         void removeFromBackpack(ItemId id) { pcclass->removeFromBackpack(id); }
