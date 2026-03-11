@@ -5,6 +5,7 @@ PlayerCharacterDelegate::PlayerCharacterDelegate() : StatBlock(0, 0), HP() {
     level = 1;
     exp = 0;
     exp_to_next_level = EXP_FOR_LEVEL2;
+    std::fill(std::begin(equipped_armor), std::end(equipped_armor), kInvalidItemId);
 }
 
 void PlayerCharacterDelegate::gainExp(unsigned int gained_exp) {
@@ -49,6 +50,29 @@ bool PlayerCharacterDelegate::hasInBackpack(ItemId id) const {
 
 const std::vector<ItemId>& PlayerCharacterDelegate::getBackpack() const {
     return backpack;
+}
+
+ItemId PlayerCharacterDelegate::equipArmor(ItemId id, unsigned int slot) {
+    ItemId replaced_id = kInvalidItemId;
+    if (equipped_armor[slot] != kInvalidItemId) {
+        replaced_id = equipped_armor[slot];
+        addToBackpack(equipped_armor[slot]);
+    }
+    equipped_armor[slot] = id;
+    return replaced_id;
+}
+
+bool PlayerCharacterDelegate::removeArmor(unsigned int slot) {
+    if (equipped_armor[slot] != kInvalidItemId) {
+        addToBackpack(equipped_armor[slot]);
+        equipped_armor[slot] = kInvalidItemId;
+        return true;
+    }
+    return false;
+}
+
+const ItemId* PlayerCharacterDelegate::getEquippedArmor() const {
+    return equipped_armor;
 }
 
 

@@ -7,13 +7,25 @@ int main() {
     ItemManager item_manager;
     PlayerCharacter p1(std::make_unique<Warrior>());
 
+    ItemId helm1 = item_manager.createArmor("leather helm", 0, 0, 2, ARMORSLOT::HEAD);
+    ItemId courasse1 = item_manager.createArmor("iron courasse", 1, 0, 6, ARMORSLOT::CHEST);
+    ItemId gloves1 = item_manager.createArmor("magic gloves", 0, 2, 1, ARMORSLOT::ARMS);
+    ItemId pants1 = item_manager.createArmor("leather pants", 0, 0, 2, ARMORSLOT::LEGS);
+
+    ItemId pants2 = item_manager.createArmor("iron greeves", 2, 0, 5, ARMORSLOT::LEGS);
+
+    item_manager.equipArmor(helm1, &p1);
+    item_manager.equipArmor(courasse1, &p1);
+    item_manager.equipArmor(gloves1, &p1);
+    item_manager.equipArmor(pants1, &p1);
+
     ItemId potion1_id = item_manager.createPotion("small heal", 5, 0, 2);
     ItemId potion2_id = item_manager.createPotion("medium heal", 8, 0, 4);
     ItemId potion3_id = item_manager.createPotion("special potion", 1, 7, 4);
 
-    Buff buff1 = Buff("golden vow", 3, 2);
-    Buff buff2 = Buff("flame grant me stength", 4, 1);
-    Buff buff3 = Buff("power within", 8, -2);
+    Buff buff1 = Buff("golden vow", 3, 2, 0);
+    Buff buff2 = Buff("flame grant me stength", 4, 1, 0);
+    Buff buff3 = Buff("power within", 8, -2, 0);
 
     p1.addToBackpack(potion1_id);
     p1.addToBackpack(potion2_id);
@@ -26,13 +38,17 @@ int main() {
         << "- HP: " << p1.getCurrentHP() << " / " << p1.getMaxHP() << "\n"
         << "- MP: " << p1.getCurrentMP() << " / " << p1.getMaxMP() << "\n"
         << "- STR: " << p1.getStrength() << "\n"
-        << "- INT: " << p1.getIntelligence() << "\n";
+        << "- INT: " << p1.getIntelligence() << "\n"
+        << "- DEF: " << p1.getDefence() << "\n";
 
     item_manager.printBackpack(p1, std::cout);
+    item_manager.printEquippedArmor(p1, std::cout);
 
     std::cout << "\n------------------------------\n\n";
 
     for (int i = 0; i < 10; i++) {
+
+        std::cout << "--- i = " << i << " ---\n\n";
 
         if (i < 2) {
             p1.gainExp((i + 1) * 1000);
@@ -44,6 +60,8 @@ int main() {
             std::cout << "* [ Taken 5 damage ] *\n";
             p1.consumeMP(9);
             std::cout << "* [ Consumed 9 MP ] *\n";
+            item_manager.removeArmor(courasse1, &p1);
+            std::cout << "* [ Removed courasse1 ] *\n";
         }
 
         if (i == 3) {
@@ -58,6 +76,8 @@ int main() {
             std::cout << "* [ Buff added (+8 str, -2 int) ] *\n";
             item_manager.useItem(potion3_id, &p1);
             std::cout << "* [ Used potion3, hp_heal = 1, mp_heal = 7 ] *\n";
+            item_manager.equipArmor(pants2, &p1);
+            std::cout << "* [ Equipped pants2 (replacing pants1) ] *\n";
         }
 
         if (i == 5) {
@@ -86,9 +106,11 @@ int main() {
             << "- HP: " << p1.getCurrentHP() << " / " << p1.getMaxHP() << "\n"
             << "- MP: " << p1.getCurrentMP() << " / " << p1.getMaxMP() << "\n"
             << "- STR: " << p1.getStrength() << "\n"
-            << "- INT: " << p1.getIntelligence() << "\n";
+            << "- INT: " << p1.getIntelligence() << "\n"
+            << "- DEF: " << p1.getDefence() << "\n";
 
         item_manager.printBackpack(p1, std::cout);
+        item_manager.printEquippedArmor(p1, std::cout);
 
         std::cout << "\n------------------------------\n\n";
     }

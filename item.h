@@ -40,6 +40,30 @@ class Potion : public ItemDelegate {
         unsigned int quantity;
 };
 
+enum class ARMORSLOT { HEAD, CHEST, ARMS, LEGS, NUM_SLOTS };
+
+class Armor : public ItemDelegate {
+
+    public:
+        Armor(std::string_view name_param, int strength_bonus_param, int intelligence_bonus_param, int defence_bonus_param, ARMORSLOT slot_param);
+
+        const char* getType() const override;
+
+        ARMORSLOT getSlot() const;
+
+        unsigned int getStrengthBonus() const;
+        unsigned int getIntelligenceBonus() const;
+        unsigned int getDefenceBonus() const;
+
+        void print(std::ostream& os) const override;
+
+    private:
+        ARMORSLOT slot;
+        unsigned int strength_bonus;
+        unsigned int intelligence_bonus;
+        unsigned int defence_bonus;
+};
+
 class Item {
 
     public:

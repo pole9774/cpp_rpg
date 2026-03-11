@@ -6,6 +6,7 @@
 #include "statblock.h"
 #include "pointwell.h"
 #include "itemid.h"
+#include "item.h"
 
 class PlayerCharacterDelegate : public StatBlock {
 
@@ -23,6 +24,11 @@ class PlayerCharacterDelegate : public StatBlock {
 
         const std::vector<ItemId>& getBackpack() const;
 
+        ItemId equipArmor(ItemId id, unsigned int slot);
+        bool removeArmor(unsigned int slot);
+
+        const ItemId* getEquippedArmor() const;
+
         virtual void levelUp() = 0;
         virtual std::string getClassName() = 0;
 
@@ -35,6 +41,7 @@ class PlayerCharacterDelegate : public StatBlock {
         unsigned int exp_to_next_level;
 
         std::vector<ItemId> backpack;
+        ItemId equipped_armor[(unsigned long long)ARMORSLOT::NUM_SLOTS];
 
         bool checkLevelUp();
 };
@@ -98,17 +105,32 @@ class PlayerCharacter {
 
         unsigned int getBaseStrength() { return pcclass->getBaseStrength(); }
         unsigned int getBaseIntelligence() { return pcclass->getBaseIntelligence(); }
+        unsigned int getBaseDefence() { return pcclass->getBaseDefence(); }
+
         unsigned int getStrength() { return pcclass->getStrength(); }
         unsigned int getIntelligence() { return pcclass->getIntelligence(); }
-
-        void addToBackpack(ItemId id) { pcclass->addToBackpack(id); }
-        void removeFromBackpack(ItemId id) { pcclass->removeFromBackpack(id); }
-        bool hasInBackpack(ItemId id) const { return pcclass->hasInBackpack(id); }
-        const std::vector<ItemId>& getBackpack() const { return pcclass->getBackpack(); }
+        unsigned int getDefence() { return pcclass->getDefence(); }
 
         void addBuff(const Buff &new_buff) { pcclass->addBuff(new_buff); }
         bool removeBuff(std::string_view buff_name) { return pcclass->removeBuff(buff_name); }
 
+        void addToBackpack(ItemId id) { pcclass->addToBackpack(id); }
+
     private:
+        void removeFromBackpack(ItemId id) { pcclass->removeFromBackpack(id); }
+        bool hasInBackpack(ItemId id) const { return pcclass->hasInBackpack(id); }
+        const std::vector<ItemId>& getBackpack() const { return pcclass->getBackpack(); }
+
+        ItemId equipArmor(ItemId id, unsigned int slot) { return pcclass->equipArmor(id, slot); }
+        bool removeArmor(unsigned int slot) { return pcclass->removeArmor(slot); }
+
+        const ItemId* getEquippedArmor() const { return pcclass->getEquippedArmor(); }
+
+        void modArmorStrength(int str_param) { pcclass->modArmorStrength(str_param); }
+        void modArmorIntelligence(int int_param) { pcclass->modArmorIntelligence(int_param); }
+        void modArmorDefence(int def_param) { pcclass->modArmorDefence(def_param); }
+
         std::unique_ptr<PlayerCharacterDelegate> pcclass;
+
+        friend class ItemManager;
 };
