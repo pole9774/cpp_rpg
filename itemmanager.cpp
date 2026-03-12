@@ -51,6 +51,10 @@ bool ItemManager::useItem(ItemId id, PlayerCharacter *pc) {
     return false;
 }
 
+void ItemManager::addToBackPack(ItemId id, PlayerCharacter *pc) {
+    pc->addToBackpack(id);
+}
+
 bool ItemManager::equipArmor(ItemId id, PlayerCharacter *pc) {
     if (!pc) return false;
 
@@ -119,6 +123,8 @@ void ItemManager::printBackpack(const PlayerCharacter& pc, std::ostream& os) con
 
 void ItemManager::printEquippedArmor(const PlayerCharacter& pc, std::ostream& os) const {
     const auto& ids = pc.getEquippedArmor();
+
+    os << "Equipped armor:\n";
 
     for (int i = 0; i < (unsigned long long)ARMORSLOT::NUM_SLOTS; i++) {
         if (ids[i] == kInvalidItemId) {

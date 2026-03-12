@@ -18,6 +18,8 @@ class ItemManager {
 
         bool useItem(ItemId id, PlayerCharacter *pc);
 
+        void addToBackPack(ItemId id, PlayerCharacter *pc);
+
         bool equipArmor(ItemId id, PlayerCharacter *pc);
         bool removeArmor(ItemId id, PlayerCharacter *pc);
 

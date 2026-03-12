@@ -27,9 +27,9 @@ int main() {
     Buff buff2 = Buff("flame grant me stength", 4, 1, 0);
     Buff buff3 = Buff("power within", 8, -2, 0);
 
-    p1.addToBackpack(potion1_id);
-    p1.addToBackpack(potion2_id);
-    p1.addToBackpack(potion3_id);
+    item_manager.addToBackPack(potion1_id, &p1);
+    item_manager.addToBackPack(potion2_id, &p1);
+    item_manager.addToBackPack(potion3_id, &p1);
 
     std::cout
         << p1.getClassName()
