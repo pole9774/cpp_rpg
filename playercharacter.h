@@ -7,6 +7,7 @@
 #include "pointwell.h"
 #include "itemid.h"
 #include "item.h"
+#include "ability.h"
 
 class PlayerCharacterDelegate : public StatBlock {
 
@@ -32,6 +33,9 @@ class PlayerCharacterDelegate : public StatBlock {
         virtual void levelUp() = 0;
         virtual std::string getClassName() = 0;
 
+        void addAbility(Ability new_ability);
+        const std::vector<Ability> getAbilities() const;
+
         PointWell HP;
         PointWell MP;
 
@@ -42,6 +46,8 @@ class PlayerCharacterDelegate : public StatBlock {
 
         std::vector<ItemId> backpack;
         ItemId equipped_armor[(unsigned long long)ARMORSLOT::NUM_SLOTS];
+
+        std::vector<Ability> abilities;
 
         bool checkLevelUp();
 };
@@ -113,6 +119,9 @@ class PlayerCharacter {
 
         void addBuff(const Buff &new_buff) { pcclass->addBuff(new_buff); }
         bool removeBuff(std::string_view buff_name) { return pcclass->removeBuff(buff_name); }
+
+        void addAbility(Ability new_ability) { pcclass->addAbility(new_ability); }
+        const std::vector<Ability> getAbilities() const { return pcclass->getAbilities(); }
 
     private:
         void addToBackpack(ItemId id) { pcclass->addToBackpack(id); }

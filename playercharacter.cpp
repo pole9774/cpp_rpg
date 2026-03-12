@@ -75,6 +75,14 @@ const ItemId* PlayerCharacterDelegate::getEquippedArmor() const {
     return equipped_armor;
 }
 
+void PlayerCharacterDelegate::addAbility(Ability new_ability) {
+    abilities.push_back(new_ability);
+}
+
+const std::vector<Ability> PlayerCharacterDelegate::getAbilities() const {
+    return abilities;
+}
+
 
 // Cleric
 
@@ -107,6 +115,8 @@ Warrior::Warrior() : PlayerCharacterDelegate() {
     MP.setMax(WARRIOR_BASEMP);
     MP.increaseCurrent(WARRIOR_BASEMP);
     increaseStats(WARRIOR_BASESTR, WARRIOR_BASEINT);
+
+    addAbility(Ability("light attack", 1));
 }
 
 std::string Warrior::getClassName() {
@@ -119,6 +129,10 @@ void Warrior::levelUp() {
     MP.setMax((unsigned int)(WARRIOR_BASEMP / 2.0) + MP.getMax());
     MP.increaseCurrent((unsigned int)(WARRIOR_BASEMP / 2.0));
     increaseStats(WARRIOR_BASESTR, WARRIOR_BASEINT);
+
+    if (level == 2) {
+        addAbility(Ability("charged attack", 2));
+    }
 }
 
 

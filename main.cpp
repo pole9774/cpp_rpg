@@ -44,6 +44,12 @@ int main() {
     item_manager.printBackpack(p1, std::cout);
     item_manager.printEquippedArmor(p1, std::cout);
 
+    std::cout << "Abilities:\n";
+    const auto& p1_abilities = p1.getAbilities();
+    for (const auto& a : p1_abilities) {
+        std::cout << "- " << a.getName() << ", mp_cost = " << a.getMpCost() << "\n";
+    }
+
     std::cout << "\n------------------------------\n\n";
 
     for (int i = 0; i < 10; i++) {
@@ -51,7 +57,7 @@ int main() {
         std::cout << "--- i = " << i << " ---\n\n";
 
         if (i < 2) {
-            p1.gainExp((i + 1) * 1000);
+            p1.gainExp((i + 1) * 50);
             std::cout << "* [ Gained " << (i + 1) * 1000 << " exp ] *\n";
         }
         
@@ -111,6 +117,12 @@ int main() {
 
         item_manager.printBackpack(p1, std::cout);
         item_manager.printEquippedArmor(p1, std::cout);
+
+        std::cout << "Abilities:\n";
+        const auto& p1_abilities = p1.getAbilities();
+        for (const auto& a : p1_abilities) {
+            std::cout << "- " << a.getName() << ", mp_cost = " << a.getMpCost() << "\n";
+        }
 
         std::cout << "\n------------------------------\n\n";
     }
