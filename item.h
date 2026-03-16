@@ -64,6 +64,23 @@ class Armor : public ItemDelegate {
         unsigned int defence_bonus;
 };
 
+enum class WEAPONSLOT { MELEE, RANGED, NUM_SLOTS };
+
+class Weapon : public ItemDelegate {
+
+    public:
+        Weapon(std::string_view name_param, WEAPONSLOT slot_param);
+
+        const char* getType() const override;
+
+        WEAPONSLOT getSlot() const;
+
+        void print(std::ostream& os) const override;
+
+    private:
+        WEAPONSLOT slot;
+};
+
 class Item {
 
     public:

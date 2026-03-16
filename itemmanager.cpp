@@ -12,6 +12,12 @@ ItemId ItemManager::createArmor(std::string_view name_param, int strength_bonus_
     return id;
 }
 
+ItemId ItemManager::createWeapon(std::string_view name_param, WEAPONSLOT slot_param) {
+    ItemId id = next_id++;
+    items.emplace(id, std::make_unique<Item>(std::make_unique<Weapon>(name_param, slot_param)));
+    return id;
+}
+
 Item* ItemManager::get(ItemId id) {
     auto it = items.find(id);
     return (it == items.end()) ? nullptr : it->second.get();
@@ -103,6 +109,39 @@ bool ItemManager::removeArmor(ItemId id, PlayerCharacter *pc) {
     return false;
 }
 
+bool ItemManager::equipWeapon(ItemId id, PlayerCharacter *pc) {
+    if (!pc) return false;
+
+    Item* item = get(id);
+    if (!item) return false;
+
+    auto *weapon = dynamic_cast<Weapon*>(item->getData());
+
+    if (weapon) {
+        ItemId replaced_id = pc->equipWeapon(id, (unsigned int)weapon->getSlot());
+        return true;
+    }
+
+    return false;
+}
+
+bool ItemManager::removeWepon(ItemId id, PlayerCharacter *pc) {
+    if (!pc) return false;
+
+    Item* item = get(id);
+    if (!item) return false;
+
+    auto *weapon = dynamic_cast<Weapon*>(item->getData());
+
+    if (weapon) {
+        if (pc->removeWeapon((unsigned int)weapon->getSlot())) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void ItemManager::printBackpack(const PlayerCharacter& pc, std::ostream& os) const {
     const auto& ids = pc.getBackpack();
 
@@ -141,4 +180,8 @@ void ItemManager::printEquippedArmor(const PlayerCharacter& pc, std::ostream& os
             os << "\n";
         }
     }
+}
+
+void ItemManager::printEquippedWeapons(const PlayerCharacter& pc, std::ostream& os) const {
+    // todo
 }

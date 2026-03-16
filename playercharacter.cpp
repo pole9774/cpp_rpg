@@ -6,6 +6,7 @@ PlayerCharacterDelegate::PlayerCharacterDelegate() : StatBlock(0, 0), HP() {
     exp = 0;
     exp_to_next_level = EXP_FOR_LEVEL2;
     std::fill(std::begin(equipped_armor), std::end(equipped_armor), kInvalidItemId);
+    std::fill(std::begin(equipped_weapons), std::end(equipped_weapons), kInvalidItemId);
 }
 
 void PlayerCharacterDelegate::gainExp(unsigned int gained_exp) {
@@ -71,8 +72,31 @@ bool PlayerCharacterDelegate::removeArmor(unsigned int slot) {
     return false;
 }
 
+ItemId PlayerCharacterDelegate::equipWeapon(ItemId id, unsigned int slot) {
+    ItemId replaced_id = kInvalidItemId;
+    if (equipped_weapons[slot] != kInvalidItemId) {
+        replaced_id = equipped_weapons[slot];
+        addToBackpack(equipped_weapons[slot]);
+    }
+    equipped_weapons[slot] = id;
+    return replaced_id;
+}
+
+bool PlayerCharacterDelegate::removeWeapon(unsigned int slot) {
+    if (equipped_weapons[slot] != kInvalidItemId) {
+        addToBackpack(equipped_weapons[slot]);
+        equipped_weapons[slot] = kInvalidItemId;
+        return true;
+    }
+    return false;
+}
+
 const ItemId* PlayerCharacterDelegate::getEquippedArmor() const {
     return equipped_armor;
+}
+
+const ItemId* PlayerCharacterDelegate::getEquippedWeapons() const {
+    return equipped_weapons;
 }
 
 void PlayerCharacterDelegate::addAbility(Ability new_ability) {

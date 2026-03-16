@@ -28,7 +28,11 @@ class PlayerCharacterDelegate : public StatBlock {
         ItemId equipArmor(ItemId id, unsigned int slot);
         bool removeArmor(unsigned int slot);
 
+        ItemId equipWeapon(ItemId id, unsigned int slot);
+        bool removeWeapon(unsigned int slot);
+
         const ItemId* getEquippedArmor() const;
+        const ItemId* getEquippedWeapons() const;
 
         virtual void levelUp() = 0;
         virtual std::string getClassName() = 0;
@@ -46,6 +50,7 @@ class PlayerCharacterDelegate : public StatBlock {
 
         std::vector<ItemId> backpack;
         ItemId equipped_armor[(unsigned long long)ARMORSLOT::NUM_SLOTS];
+        ItemId equipped_weapons[(unsigned long long)WEAPONSLOT::NUM_SLOTS];
 
         std::vector<Ability> abilities;
 
@@ -132,7 +137,11 @@ class PlayerCharacter {
         ItemId equipArmor(ItemId id, unsigned int slot) { return pcclass->equipArmor(id, slot); }
         bool removeArmor(unsigned int slot) { return pcclass->removeArmor(slot); }
 
+        ItemId equipWeapon(ItemId id, unsigned int slot) { return pcclass->equipWeapon(id, slot); }
+        bool removeWeapon(unsigned int slot) { return pcclass->removeWeapon(slot); }
+
         const ItemId* getEquippedArmor() const { return pcclass->getEquippedArmor(); }
+        const ItemId* getEquippedWeapons() const { return pcclass->getEquippedWeapons(); }
 
         void modArmorStrength(int str_param) { pcclass->modArmorStrength(str_param); }
         void modArmorIntelligence(int int_param) { pcclass->modArmorIntelligence(int_param); }
