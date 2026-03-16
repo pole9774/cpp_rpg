@@ -6,3 +6,7 @@ compile into main.exe (multiple files):
 
 run main.exe:
     .\main.exe
+
+tests:
+    g++ tests.cpp pointwell.cpp statblock.cpp playercharacter.cpp item.cpp itemmanager.cpp buff.cpp ability.cpp -o tests -std=c++20
+    .\tests.exe
