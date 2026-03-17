@@ -5,6 +5,8 @@ PlayerCharacterDelegate::PlayerCharacterDelegate() : StatBlock(0, 0), HP() {
     level = 1;
     exp = 0;
     exp_to_next_level = EXP_FOR_LEVEL2;
+    melee_weapon_damage = 0;
+    ranged_weapon_damage = 0;
     std::fill(std::begin(equipped_armor), std::end(equipped_armor), kInvalidItemId);
     std::fill(std::begin(equipped_weapons), std::end(equipped_weapons), kInvalidItemId);
 }
@@ -99,6 +101,22 @@ const ItemId* PlayerCharacterDelegate::getEquippedWeapons() const {
     return equipped_weapons;
 }
 
+void PlayerCharacterDelegate::setMeleeWeaponDamage(unsigned int damage_param) {
+    melee_weapon_damage = damage_param;
+}
+
+void PlayerCharacterDelegate::setRangedWeaponDamage(unsigned int damage_param) {
+    ranged_weapon_damage = damage_param;
+}
+
+const unsigned int PlayerCharacterDelegate::getMeleeWeaponDamage() const {
+    return melee_weapon_damage;
+}
+
+const unsigned int PlayerCharacterDelegate::getRangedWeaponDamage() const {
+    return ranged_weapon_damage;
+}
+
 void PlayerCharacterDelegate::addAbility(Ability new_ability) {
     abilities.push_back(new_ability);
 }
@@ -185,3 +203,25 @@ void Wizard::levelUp() {
 
 PlayerCharacter::PlayerCharacter(std::unique_ptr<PlayerCharacterDelegate> pc)
     : pcclass(std::move(pc)) {}
+
+const unsigned int PlayerCharacter::meleeAttack() const {
+    unsigned int attack_dmg = 1;
+    const auto& ids = getEquippedWeapons();
+
+    if (ids[(unsigned int)WEAPONSLOT::MELEE] != kInvalidItemId) {
+        attack_dmg += pcclass->getMeleeWeaponDamage();
+    }
+
+    return attack_dmg;
+}
+
+const unsigned int PlayerCharacter::rangedAttack() const {
+    unsigned int attack_dmg = 1;
+    const auto& ids = getEquippedWeapons();
+
+    if (ids[(unsigned int)WEAPONSLOT::RANGED] != kInvalidItemId) {
+        attack_dmg += pcclass->getRangedWeaponDamage();
+    }
+
+    return attack_dmg;
+}

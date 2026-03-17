@@ -10,7 +10,7 @@ class ItemManager {
     public:
         ItemId createPotion(std::string_view name_param, unsigned int hp_heal_param, unsigned int mp_heal_param, unsigned int quantity_param);
         ItemId createArmor(std::string_view name_param, int strength_bonus_param, int intelligence_bonus_param, int defence_bonus_param, ARMORSLOT slot_param);
-        ItemId createWeapon(std::string_view name_param, WEAPONSLOT slot_param);
+        ItemId createWeapon(std::string_view name_param, unsigned int base_damage_param, WEAPONSLOT slot_param);
 
         Item* get(ItemId id);
         const Item* get(ItemId id) const;
@@ -25,6 +25,8 @@ class ItemManager {
         bool removeArmor(ItemId id, PlayerCharacter *pc);
         bool equipWeapon(ItemId id, PlayerCharacter *pc);
         bool removeWepon(ItemId id, PlayerCharacter *pc);
+
+        unsigned int getWeaponDamage(ItemId id);
 
         void printBackpack(const PlayerCharacter& pc, std::ostream& os) const;
         void printEquippedArmor(const PlayerCharacter& pc, std::ostream& os) const;

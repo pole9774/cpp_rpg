@@ -69,9 +69,11 @@ enum class WEAPONSLOT { MELEE, RANGED, NUM_SLOTS };
 class Weapon : public ItemDelegate {
 
     public:
-        Weapon(std::string_view name_param, WEAPONSLOT slot_param);
+        Weapon(std::string_view name_param, unsigned int base_damage_param, WEAPONSLOT slot_param);
 
         const char* getType() const override;
+
+        const unsigned int getBaseDamage() const;
 
         WEAPONSLOT getSlot() const;
 
@@ -79,6 +81,7 @@ class Weapon : public ItemDelegate {
 
     private:
         WEAPONSLOT slot;
+        unsigned int base_damage;
 };
 
 class Item {

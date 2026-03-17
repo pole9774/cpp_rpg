@@ -29,7 +29,7 @@ bool PointWell::setMax(unsigned int new_max) {
     return true;
 }
 
-unsigned int PointWell::getMax() {
+const unsigned int PointWell::getMax() const {
     return max_value;
 }
 
@@ -51,6 +51,6 @@ void PointWell::increaseCurrent(unsigned int value) {
     current_value += value;
 }
 
-unsigned int PointWell::getCurrent() {
+const unsigned int PointWell::getCurrent() const {
     return current_value;
 }

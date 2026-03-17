@@ -8,13 +8,13 @@ class PointWell {
 
         bool setMax(unsigned int new_max);
 
-        unsigned int getMax();
+        const unsigned int getMax() const;
 
         void reduceCurrent(unsigned int value);
 
         void increaseCurrent(unsigned int value);
 
-        unsigned int getCurrent();
+        const unsigned int getCurrent() const;
 
     private:
         unsigned int current_value;

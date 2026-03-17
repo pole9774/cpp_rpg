@@ -12,9 +12,9 @@ ItemId ItemManager::createArmor(std::string_view name_param, int strength_bonus_
     return id;
 }
 
-ItemId ItemManager::createWeapon(std::string_view name_param, WEAPONSLOT slot_param) {
+ItemId ItemManager::createWeapon(std::string_view name_param, unsigned int base_damage_param, WEAPONSLOT slot_param) {
     ItemId id = next_id++;
-    items.emplace(id, std::make_unique<Item>(std::make_unique<Weapon>(name_param, slot_param)));
+    items.emplace(id, std::make_unique<Item>(std::make_unique<Weapon>(name_param, base_damage_param, slot_param)));
     return id;
 }
 
@@ -119,6 +119,13 @@ bool ItemManager::equipWeapon(ItemId id, PlayerCharacter *pc) {
 
     if (weapon) {
         ItemId replaced_id = pc->equipWeapon(id, (unsigned int)weapon->getSlot());
+
+        if (weapon->getSlot() == WEAPONSLOT::MELEE) {
+            pc->setMeleeWeaponDamage(weapon->getBaseDamage());
+        } else {
+            pc->setRangedWeaponDamage(weapon->getBaseDamage());
+        }
+        
         return true;
     }
 
@@ -135,11 +142,32 @@ bool ItemManager::removeWepon(ItemId id, PlayerCharacter *pc) {
 
     if (weapon) {
         if (pc->removeWeapon((unsigned int)weapon->getSlot())) {
+
+            if (weapon->getSlot() == WEAPONSLOT::MELEE) {
+                pc->setMeleeWeaponDamage(0);
+            } else {
+                pc->setRangedWeaponDamage(0);
+            }
+
             return true;
         }
     }
 
     return false;
+}
+
+unsigned int ItemManager::getWeaponDamage(ItemId id) {
+    Item* item = get(id);
+
+    if (!item) return 0;
+
+    auto *weapon = dynamic_cast<Weapon*>(item->getData());
+
+    if (weapon) {
+        return weapon->getBaseDamage();
+    }
+
+    return 0;
 }
 
 void ItemManager::printBackpack(const PlayerCharacter& pc, std::ostream& os) const {
@@ -183,5 +211,23 @@ void ItemManager::printEquippedArmor(const PlayerCharacter& pc, std::ostream& os
 }
 
 void ItemManager::printEquippedWeapons(const PlayerCharacter& pc, std::ostream& os) const {
-    // todo
+    const auto& ids = pc.getEquippedWeapons();
+
+    os << "Equipped weapons:\n";
+
+    for (int i = 0; i < (unsigned long long)WEAPONSLOT::NUM_SLOTS; i++) {
+        if (ids[i] == kInvalidItemId) {
+            os << " - <empty slot>\n";
+        } else {
+            const Item* item = get(ids[i]);
+            if (!item) {
+                os << " - [id=" << ids[i] << "] <missing>\n";
+                continue;
+            }
+
+            os << " - [id=" << ids[i] << "] ";
+            item->print(os);
+            os << "\n";
+        }
+    }
 }

@@ -22,8 +22,8 @@ Potion::Potion(std::string_view name_param, unsigned int hp_heal_param, unsigned
 Armor::Armor(std::string_view name_param, int strength_bonus_param, int intelligence_bonus_param, int defence_bonus_param, ARMORSLOT slot_param)
     : ItemDelegate(name_param), strength_bonus(strength_bonus_param), intelligence_bonus(intelligence_bonus_param), defence_bonus(defence_bonus_param), slot(slot_param) {}
 
-Weapon::Weapon(std::string_view name_param, WEAPONSLOT slot_param)
-    : ItemDelegate(name_param), slot(slot_param) {}
+Weapon::Weapon(std::string_view name_param, unsigned int base_damage_param, WEAPONSLOT slot_param)
+    : ItemDelegate(name_param), base_damage(base_damage_param), slot(slot_param) {}
 
 const char* Potion::getType() const {
     return "potion";
@@ -83,6 +83,10 @@ void Armor::print(std::ostream& os) const {
        << " str_bonus=" << strength_bonus
        << " int_bonus=" << intelligence_bonus
        << " def_bonus=" << defence_bonus;
+}
+
+const unsigned int Weapon::getBaseDamage() const {
+    return base_damage;
 }
 
 WEAPONSLOT Weapon::getSlot() const {

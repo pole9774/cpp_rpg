@@ -34,6 +34,12 @@ class PlayerCharacterDelegate : public StatBlock {
         const ItemId* getEquippedArmor() const;
         const ItemId* getEquippedWeapons() const;
 
+        void setMeleeWeaponDamage(unsigned int damage_param);
+        void setRangedWeaponDamage(unsigned int damage_param);
+
+        const unsigned int getMeleeWeaponDamage() const;
+        const unsigned int getRangedWeaponDamage() const;
+
         virtual void levelUp() = 0;
         virtual std::string getClassName() = 0;
 
@@ -47,6 +53,9 @@ class PlayerCharacterDelegate : public StatBlock {
         unsigned int level;
         unsigned int exp;
         unsigned int exp_to_next_level;
+
+        unsigned int melee_weapon_damage;
+        unsigned int ranged_weapon_damage;
 
         std::vector<ItemId> backpack;
         ItemId equipped_armor[(unsigned long long)ARMORSLOT::NUM_SLOTS];
@@ -128,6 +137,9 @@ class PlayerCharacter {
         void addAbility(Ability new_ability) { pcclass->addAbility(new_ability); }
         const std::vector<Ability> getAbilities() const { return pcclass->getAbilities(); }
 
+        const unsigned int meleeAttack() const;
+        const unsigned int rangedAttack() const;
+
     private:
         void addToBackpack(ItemId id) { pcclass->addToBackpack(id); }
         void removeFromBackpack(ItemId id) { pcclass->removeFromBackpack(id); }
@@ -146,6 +158,9 @@ class PlayerCharacter {
         void modArmorStrength(int str_param) { pcclass->modArmorStrength(str_param); }
         void modArmorIntelligence(int int_param) { pcclass->modArmorIntelligence(int_param); }
         void modArmorDefence(int def_param) { pcclass->modArmorDefence(def_param); }
+
+        void setMeleeWeaponDamage(unsigned int damage_param) { pcclass->setMeleeWeaponDamage(damage_param); }
+        void setRangedWeaponDamage(unsigned int damage_param) { pcclass->setRangedWeaponDamage(damage_param); }
 
         std::unique_ptr<PlayerCharacterDelegate> pcclass;
 
