@@ -7,7 +7,7 @@
 class ItemDelegate {
 
     public:
-        ItemDelegate(std::string_view name);
+        ItemDelegate(std::string_view name_param);
         virtual ~ItemDelegate() = default;
 
         std::string_view getName() const;

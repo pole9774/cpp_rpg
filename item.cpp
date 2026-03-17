@@ -1,6 +1,6 @@
 #include "item.h"
 
-ItemDelegate::ItemDelegate(std::string_view name) : name(name) {}
+ItemDelegate::ItemDelegate(std::string_view name_param) : name(name_param) {}
 
 Item::Item(std::unique_ptr<ItemDelegate> d) : data(std::move(d)) {}
 

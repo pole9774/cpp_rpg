@@ -225,3 +225,25 @@ const unsigned int PlayerCharacter::rangedAttack() const {
 
     return attack_dmg;
 }
+
+void PlayerCharacter::print(std::ostream& os) const {
+    const auto& p1_abilities = pcclass->getAbilities();
+
+    os << pcclass->getClassName()
+        << " - level: " << pcclass->getLevel() << "\n"
+        << "- EXP: " << pcclass->getEXP() << " / " << pcclass->getEXPToNextLevel() << "\n"
+        << "- HP: " << pcclass->HP.getCurrent() << " / " << pcclass->HP.getMax() << "\n"
+        << "- MP: " << pcclass->MP.getCurrent() << " / " << pcclass->MP.getMax() << "\n"
+        << "- STR: " << pcclass->getStrength() << "\n"
+        << "- INT: " << pcclass->getIntelligence() << "\n"
+        << "- DEF: " << pcclass->getDefence() << "\n"
+        << "- Melee attack dmg: " << meleeAttack() << "\n"
+        << "- Ranged attack dmg: " << rangedAttack() << "\n"
+        << "- Abilities:" << "\n";
+    
+    for (const auto& a : p1_abilities) {
+        os << "  - "; 
+        a.print(os); 
+        os << "\n";
+    }
+}

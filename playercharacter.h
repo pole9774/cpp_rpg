@@ -140,6 +140,8 @@ class PlayerCharacter {
         const unsigned int meleeAttack() const;
         const unsigned int rangedAttack() const;
 
+        void print(std::ostream& os) const;
+
     private:
         void addToBackpack(ItemId id) { pcclass->addToBackpack(id); }
         void removeFromBackpack(ItemId id) { pcclass->removeFromBackpack(id); }

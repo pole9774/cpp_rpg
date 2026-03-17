@@ -10,3 +10,7 @@ std::string_view Ability::getName() const {
 unsigned int Ability::getMpCost() const {
     return mp_cost;
 }
+
+void Ability::print(std::ostream& os) const {
+    os << name << ": mp_cost = " << mp_cost;
+}

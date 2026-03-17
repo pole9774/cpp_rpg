@@ -1,11 +1,13 @@
 #include <iostream>
 #include "playercharacter.h"
 #include "itemmanager.h"
+#include "monster.h"
 
 int main() {
 
     ItemManager item_manager;
     PlayerCharacter p1(std::make_unique<Warrior>());
+    Monster m1("goblin", 35, 5);
 
     ItemId helm1 = item_manager.createArmor("leather helm", 0, 0, 2, ARMORSLOT::HEAD);
     ItemId courasse1 = item_manager.createArmor("iron courasse", 1, 0, 6, ARMORSLOT::CHEST);
@@ -31,24 +33,21 @@ int main() {
     item_manager.addToBackPack(potion2_id, &p1);
     item_manager.addToBackPack(potion3_id, &p1);
 
-    std::cout
-        << p1.getClassName()
-        << " - level: " << p1.getLevel() << "\n"
-        << "- EXP: " << p1.getEXP() << " / " << p1.getEXPToNextLevel() << "\n"
-        << "- HP: " << p1.getCurrentHP() << " / " << p1.getMaxHP() << "\n"
-        << "- MP: " << p1.getCurrentMP() << " / " << p1.getMaxMP() << "\n"
-        << "- STR: " << p1.getStrength() << "\n"
-        << "- INT: " << p1.getIntelligence() << "\n"
-        << "- DEF: " << p1.getDefence() << "\n";
+    ItemId sword1 = item_manager.createWeapon("long sword", 5, WEAPONSLOT::MELEE);
+    ItemId dagger1 = item_manager.createWeapon("dagger", 2, WEAPONSLOT::MELEE);
+    ItemId bow1 = item_manager.createWeapon("shortbow", 3, WEAPONSLOT::RANGED);
+    ItemId bow2 = item_manager.createWeapon("longbow", 4, WEAPONSLOT::RANGED);
 
+    item_manager.equipWeapon(sword1, &p1);
+    item_manager.equipWeapon(bow1, &p1);
+    item_manager.equipWeapon(bow2, &p1);
+
+    p1.print(std::cout);
     item_manager.printBackpack(p1, std::cout);
     item_manager.printEquippedArmor(p1, std::cout);
+    item_manager.printEquippedWeapons(p1, std::cout);
 
-    std::cout << "Abilities:\n";
-    const auto& p1_abilities = p1.getAbilities();
-    for (const auto& a : p1_abilities) {
-        std::cout << "- " << a.getName() << ", mp_cost = " << a.getMpCost() << "\n";
-    }
+    m1.print(std::cout);
 
     std::cout << "\n------------------------------\n\n";
 
@@ -58,12 +57,12 @@ int main() {
 
         if (i < 2) {
             p1.gainExp((i + 1) * 50);
-            std::cout << "* [ Gained " << (i + 1) * 1000 << " exp ] *\n";
+            std::cout << "* [ Gained " << (i + 1) * 50 << " exp ] *\n";
+            p1.takeDamage(m1.attack());
+            std::cout << "* [ p1 attacked by goblin! ] *\n";
         }
         
         if (i == 2) {
-            p1.takeDamage(5);
-            std::cout << "* [ Taken 5 damage ] *\n";
             p1.consumeMP(9);
             std::cout << "* [ Consumed 9 MP ] *\n";
             item_manager.removeArmor(courasse1, &p1);
@@ -75,6 +74,10 @@ int main() {
             std::cout << "* [ Buff added (+3 str, +2 int) ] *\n";
             p1.addBuff(buff2);
             std::cout << "* [ Buff added (+4 str, +1 int) ] *\n";
+            item_manager.equipWeapon(dagger1, &p1);
+            std::cout << "* [ Equipped dagger ] *\n";
+            m1.takeDamage(p1.meleeAttack());
+            std::cout << "* [ goblin melee attacked by p1! ] *\n";
         }
 
         if (i == 4) {
@@ -84,6 +87,8 @@ int main() {
             std::cout << "* [ Used potion3, hp_heal = 1, mp_heal = 7 ] *\n";
             item_manager.equipArmor(pants2, &p1);
             std::cout << "* [ Equipped pants2 (replacing pants1) ] *\n";
+            m1.takeDamage(p1.rangedAttack());
+            std::cout << "* [ goblin ranged attacked by p1! ] *\n";
         }
 
         if (i == 5) {
@@ -105,24 +110,12 @@ int main() {
             std::cout << "* [ Used potion2, hp_heal = 8 ] *\n";
         }
 
-        std::cout
-            << p1.getClassName()
-            << " - level: " << p1.getLevel() << "\n"
-            << "- EXP: " << p1.getEXP() << " / " << p1.getEXPToNextLevel() << "\n"
-            << "- HP: " << p1.getCurrentHP() << " / " << p1.getMaxHP() << "\n"
-            << "- MP: " << p1.getCurrentMP() << " / " << p1.getMaxMP() << "\n"
-            << "- STR: " << p1.getStrength() << "\n"
-            << "- INT: " << p1.getIntelligence() << "\n"
-            << "- DEF: " << p1.getDefence() << "\n";
-
+        p1.print(std::cout);
         item_manager.printBackpack(p1, std::cout);
         item_manager.printEquippedArmor(p1, std::cout);
+        item_manager.printEquippedWeapons(p1, std::cout);
 
-        std::cout << "Abilities:\n";
-        const auto& p1_abilities = p1.getAbilities();
-        for (const auto& a : p1_abilities) {
-            std::cout << "- " << a.getName() << ", mp_cost = " << a.getMpCost() << "\n";
-        }
+        m1.print(std::cout);
 
         std::cout << "\n------------------------------\n\n";
     }

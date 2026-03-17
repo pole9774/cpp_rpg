@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <string>
 
 class Ability {
@@ -10,6 +11,8 @@ class Ability {
         std::string_view getName() const;
 
         unsigned int getMpCost() const;
+
+        void print(std::ostream& os) const;
 
     private:
         std::string name;
