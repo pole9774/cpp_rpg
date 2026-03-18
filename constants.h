@@ -8,7 +8,7 @@ const unsigned int CLERIC_BASEMP = 20;
 const unsigned int CLERIC_BASESTR = 3;
 const unsigned int CLERIC_BASEINT = 4;
 
-const unsigned int WARRIOR_BASEHP = 20;
+const unsigned int WARRIOR_BASEHP = 30;
 const unsigned int WARRIOR_BASEMP = 5;
 const unsigned int WARRIOR_BASESTR = 5;
 const unsigned int WARRIOR_BASEINT = 2;

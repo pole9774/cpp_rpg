@@ -95,7 +95,7 @@ WEAPONSLOT Weapon::getSlot() const {
 
 void Weapon::print(std::ostream& os) const {
     os << getName()
-       << " type=" << getType();
+        << " type=" << getType();
 }
 
 void Item::print(std::ostream& os) const {

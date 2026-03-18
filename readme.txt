@@ -1,10 +1,5 @@
-compile into main.exe:
-    g++ main.cpp -o main -std=c++20
-
-compile into main.exe (multiple files):
+compile into main.exe (random testing):
     g++ main.cpp pointwell.cpp statblock.cpp playercharacter.cpp item.cpp itemmanager.cpp buff.cpp ability.cpp monster.cpp -o main -std=c++20
-
-run main.exe:
     .\main.exe
 
 tests:
