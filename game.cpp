@@ -32,6 +32,8 @@ char the_map[12][13] = {
     "xxxxxxxxxxxx"
 };
 
+ItemManager item_manager;
+
 int monsters_defeated = 0;
 
 struct Player {
@@ -69,6 +71,99 @@ struct Fightable {
     int exp_worth = 0;
 };
 
+void displayCharacterInfo(Player &player) {
+    player.us.print(std::cout);
+    item_manager.printEquippedArmor(player.us, std::cout);
+    item_manager.printEquippedWeapons(player.us, std::cout);
+}
+
+void openInventory(Player &player) {
+    bool done = false;
+    int selected_item = 0;
+    
+    while (!done) {
+        system("CLS");
+        auto item_ids_list = player.us.getBackpack();
+
+        std::cout << "Inventory:\n";
+        int item_index = 0;
+        for (const auto &item_id : item_ids_list) {
+            if (item_index == selected_item) {
+                std::cout << "> ";
+            } else {
+                std::cout << "  ";
+            }
+            item_manager.printItem(item_id, std::cout);
+            std::cout << "\n";
+            item_index++;
+        }
+
+        std::cout << "\ndone (d), up (w), down (s), use/equip (e): ";
+        char c = readCommandChar();
+
+        switch (c) {
+            case 'd':
+                done = true;
+                break;
+            case 'w':
+                selected_item--;
+                if (selected_item < 0) {
+                    selected_item = 0;
+                }
+                break;
+            case 's':
+                selected_item++;
+                if (selected_item > (item_ids_list.size() - 1)) {
+                    selected_item = item_ids_list.size() - 1;
+                }
+                break;
+            case 'e':
+                if (item_ids_list.size() > 0) {
+                    if (item_manager.getType(item_ids_list[selected_item]) == "potion") {
+                        item_manager.useItem(item_ids_list[selected_item], &(player.us));
+                    } else if (item_manager.getType(item_ids_list[selected_item]) == "weapon") {
+                        item_manager.equipWeapon(item_ids_list[selected_item], &(player.us));
+                    } else if (item_manager.getType(item_ids_list[selected_item]) == "armor") {
+                        item_manager.equipArmor(item_ids_list[selected_item], &(player.us));
+                    }
+
+                    if (selected_item == (item_ids_list.size() - 1) && selected_item > 0) {
+                        selected_item--;
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+ItemId dropRandomItem() {
+    static std::mt19937 gen(std::random_device{}());
+    static std::uniform_int_distribution<int> dist(1, 100);
+    int tmp = dist(gen);
+
+    ItemId created_item = kInvalidItemId;
+
+    if (tmp <= 8) {
+        created_item = item_manager.createArmor("basic helm", 1, 0, 4, ARMORSLOT::HEAD);
+    } else if (tmp <= 16) {
+        created_item = item_manager.createArmor("basic courasse", 2, 0, 6, ARMORSLOT::CHEST);
+    } else if (tmp <= 24) {
+        created_item = item_manager.createArmor("basic helm", 1, 0, 3, ARMORSLOT::ARMS);
+    } else if (tmp <= 32) {
+        created_item = item_manager.createArmor("basic pants", 1, 0, 5, ARMORSLOT::LEGS);
+    } else if (tmp <= 40) {
+        created_item = item_manager.createWeapon("dagger", 4, WEAPONSLOT::MELEE);
+    } else if (tmp <= 48) {
+        created_item = item_manager.createWeapon("shortbow", 3, WEAPONSLOT::RANGED);
+    } else if (tmp <= 90) {
+        created_item = item_manager.createPotion("small heal", 5, 0, 1);
+    }
+
+    return created_item;
+}
+
 Fightable replaceEnemy() {
     static std::mt19937 gen(std::random_device{}());
     static std::uniform_int_distribution<int> dist(1, 4);
@@ -94,7 +189,7 @@ void enterFightSequence(Player &player, Fightable &enemy) {
         system("CLS");
 
         std::cout << "Player vs Monster\n\n";
-        player.us.print(std::cout);
+        displayCharacterInfo(player);
         std::cout << "\n\n-------------------\n\n";
         enemy.monster.print(std::cout);
 
@@ -114,7 +209,15 @@ void enterFightSequence(Player &player, Fightable &enemy) {
     if (player.isAlive()) {
         std::cout << "You won against the monster!\n";
         player.us.gainExp(enemy.exp_worth);
+        std::cout << "You gained " << enemy.exp_worth << " exp!\n";
         monsters_defeated++;
+        ItemId item_drop = dropRandomItem();
+        if (item_drop != kInvalidItemId) {
+            item_manager.addToBackPack(item_drop, &(player.us));
+            std::cout << "You received ";
+            item_manager.printItem(item_drop, std::cout);
+            std::cout << "! (added to the backpack)\n";
+        }
         enemy = replaceEnemy();
     } else {
         std::cout << "You were defeated by the monster...\n";
@@ -207,10 +310,10 @@ int main() {
 
     for (;;) {
         std::cout << "\n";
-        main_character.us.print(std::cout);
+        displayCharacterInfo(main_character);
         std::cout << "\nMonsters defeated: " << monsters_defeated << "\n";
 
-        std::cout << "\nmove (wasd): ";
+        std::cout << "\nmove (wasd), inventory (i): ";
         char c = readCommandChar();
 
         switch (c) {
@@ -225,6 +328,9 @@ int main() {
                 break;
             case 'd':
                 main_character.ypos++;
+                break;
+            case 'i':
+                openInventory(main_character);
                 break;
             default:
                 break;

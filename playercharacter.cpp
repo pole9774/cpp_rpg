@@ -242,7 +242,7 @@ void PlayerCharacter::print(std::ostream& os) const {
         << "- Abilities:" << "\n";
     
     for (const auto& a : p1_abilities) {
-        os << "  - "; 
+        os << "  + "; 
         a.print(os); 
         os << "\n";
     }

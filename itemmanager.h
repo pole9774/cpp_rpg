@@ -15,6 +15,8 @@ class ItemManager {
         Item* get(ItemId id);
         const Item* get(ItemId id) const;
 
+        std::string_view getType(ItemId id);
+
         bool destroy(ItemId id);
 
         bool useItem(ItemId id, PlayerCharacter *pc);
@@ -28,6 +30,7 @@ class ItemManager {
 
         unsigned int getWeaponDamage(ItemId id);
 
+        void printItem(ItemId id, std::ostream& os) const;
         void printBackpack(const PlayerCharacter& pc, std::ostream& os) const;
         void printEquippedArmor(const PlayerCharacter& pc, std::ostream& os) const;
         void printEquippedWeapons(const PlayerCharacter& pc, std::ostream& os) const;

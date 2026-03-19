@@ -94,6 +94,8 @@ class Item {
         ItemDelegate* getData();
         const ItemDelegate* getData() const;
 
+        const char* getType() const { return data->getType(); }
+
         void print(std::ostream& os) const;
 
     private:

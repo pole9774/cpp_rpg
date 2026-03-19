@@ -28,6 +28,11 @@ const Item* ItemManager::get(ItemId id) const {
     return (it == items.end()) ? nullptr : it->second.get();
 }
 
+std::string_view ItemManager::getType(ItemId id) {
+    Item* item = get(id);
+    return item ? item->getType() : "";
+}
+
 bool ItemManager::destroy(ItemId id) {
     return items.erase(id) > 0;
 }
@@ -70,6 +75,9 @@ bool ItemManager::equipArmor(ItemId id, PlayerCharacter *pc) {
     auto *armor = dynamic_cast<Armor*>(item->getData());
 
     if (armor) {
+        if (pc->hasInBackpack(id)) {
+            pc->removeFromBackpack(id);
+        }
         ItemId replaced_id = pc->equipArmor(id, (unsigned int)(armor->getSlot()));
         pc->modArmorStrength(armor->getStrengthBonus());
         pc->modArmorIntelligence(armor->getIntelligenceBonus());
@@ -118,6 +126,9 @@ bool ItemManager::equipWeapon(ItemId id, PlayerCharacter *pc) {
     auto *weapon = dynamic_cast<Weapon*>(item->getData());
 
     if (weapon) {
+        if (pc->hasInBackpack(id)) {
+            pc->removeFromBackpack(id);
+        }
         ItemId replaced_id = pc->equipWeapon(id, (unsigned int)weapon->getSlot());
 
         if (weapon->getSlot() == WEAPONSLOT::MELEE) {
@@ -168,6 +179,11 @@ unsigned int ItemManager::getWeaponDamage(ItemId id) {
     }
 
     return 0;
+}
+
+void ItemManager::printItem(ItemId id, std::ostream& os) const {
+    const Item* item = get(id);
+    item->print(os);
 }
 
 void ItemManager::printBackpack(const PlayerCharacter& pc, std::ostream& os) const {
