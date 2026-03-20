@@ -77,6 +77,70 @@ void displayCharacterInfo(Player &player) {
     item_manager.printEquippedWeapons(player.us, std::cout);
 }
 
+bool combatInventory(Player &player) {
+    bool done = false;
+    bool action_used = false;
+    int selected_item = 0;
+
+    while (!done && !action_used) {
+        system("CLS");
+        auto item_ids_list = player.us.getBackpack();
+
+        std::cout << "Inventory:\n";
+        int item_index = 0;
+        for (const auto &item_id : item_ids_list) {
+            if (item_index == selected_item) {
+                std::cout << "> ";
+            } else {
+                std::cout << "  ";
+            }
+            item_manager.printItem(item_id, std::cout);
+            std::cout << "\n";
+            item_index++;
+        }
+
+        std::cout << "\ndone (d), up (w), down (s), use/equip (e): ";
+        char c = readCommandChar();
+
+        switch (c) {
+            case 'd':
+                done = true;
+                break;
+            case 'w':
+                selected_item--;
+                if (selected_item < 0) {
+                    selected_item = 0;
+                }
+                break;
+            case 's':
+                selected_item++;
+                if (selected_item > (item_ids_list.size() - 1)) {
+                    selected_item = item_ids_list.size() - 1;
+                }
+                break;
+            case 'e':
+                if (item_ids_list.size() > 0) {
+                    if (item_manager.getType(item_ids_list[selected_item]) == "potion") {
+                        action_used = item_manager.useItem(item_ids_list[selected_item], &(player.us));
+                    } else if (item_manager.getType(item_ids_list[selected_item]) == "weapon") {
+                        action_used = item_manager.equipWeapon(item_ids_list[selected_item], &(player.us));
+                    } else if (item_manager.getType(item_ids_list[selected_item]) == "armor") {
+                        action_used = item_manager.equipArmor(item_ids_list[selected_item], &(player.us));
+                    }
+
+                    if (selected_item == (item_ids_list.size() - 1) && selected_item > 0) {
+                        selected_item--;
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    return action_used;
+}
+
 void openInventory(Player &player) {
     bool done = false;
     int selected_item = 0;
@@ -185,21 +249,38 @@ Fightable replaceEnemy() {
 }
 
 void enterFightSequence(Player &player, Fightable &enemy) {
+    enum class FightOptions { NONE, ATTACK, INVENTORY, ABILITY };
+
     while (player.isAlive() && enemy.isAlive()) {
-        system("CLS");
+        FightOptions action_taken = FightOptions::NONE;
 
-        std::cout << "Player vs Monster\n\n";
-        displayCharacterInfo(player);
-        std::cout << "\n\n-------------------\n\n";
-        enemy.monster.print(std::cout);
+        while (action_taken == FightOptions::NONE) {
+            system("CLS");
 
-        std::cout << "\n\n\naction (a = attack): ";
-        char action = '\0';
-        while (action != 'a') {
-            action = readCommandChar();
+            std::cout << "Player vs Monster\n\n";
+            displayCharacterInfo(player);
+            std::cout << "\n\n-------------------\n\n";
+            enemy.monster.print(std::cout);
+
+            std::cout << "\nmeele attack (m), ranged attack (r), inventory (i): ";
+            char action = readCommandChar();
+
+            switch (action) {
+                case 'm':
+                    action_taken = FightOptions::ATTACK;
+                    enemy.monster.takeDamage(player.us.meleeAttack());
+                    break;
+                case 'r':
+                    action_taken = FightOptions::ATTACK;
+                    enemy.monster.takeDamage(player.us.rangedAttack());
+                    break;
+                case 'i':
+                    action_taken = (combatInventory(player)) ? FightOptions::INVENTORY : FightOptions::NONE;
+                    break;
+                default:
+                    break;
+            }
         }
-
-        enemy.monster.takeDamage(player.us.meleeAttack());
 
         if (enemy.isAlive()) {
             player.us.takeDamage(enemy.monster.attack());
