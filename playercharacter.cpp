@@ -158,7 +158,7 @@ Warrior::Warrior() : PlayerCharacterDelegate() {
     MP.increaseCurrent(WARRIOR_BASEMP);
     increaseStats(WARRIOR_BASESTR, WARRIOR_BASEINT);
 
-    addAbility(Ability("light attack", 1));
+    addAbility(Ability("light attack", 1, 2, TARGET::ENEMY));
 }
 
 std::string Warrior::getClassName() {
@@ -173,7 +173,7 @@ void Warrior::levelUp() {
     increaseStats(WARRIOR_BASESTR, WARRIOR_BASEINT);
 
     if (level == 2) {
-        addAbility(Ability("charged attack", 2));
+        addAbility(Ability("charged attack", 2, 3, TARGET::ENEMY));
     }
 }
 
