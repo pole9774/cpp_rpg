@@ -90,6 +90,10 @@ bool StatBlock::removeBuff(std::string_view buff_name) {
     return true;
 }
 
+const std::vector<Buff> StatBlock::getBuffs() const {
+    return buffs;
+}
+
 void StatBlock::buffTurnPassed() {
     for (auto &buff : buffs) {
         buff.decreaseDuration();

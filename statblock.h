@@ -21,6 +21,8 @@ class StatBlock {
         void addBuff(const Buff &new_buff);
         bool removeBuff(std::string_view buff_name);
 
+        const std::vector<Buff> getBuffs() const;
+
         void modArmorStrength(int str_param);
         void modArmorIntelligence(int int_param);
         void modArmorDefence(int def_param);

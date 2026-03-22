@@ -16,6 +16,8 @@ class Buff {
         
         void decreaseDuration();
 
+        void print(std::ostream& os) const;
+
     private:
         std::string name;
         int strength_buff;

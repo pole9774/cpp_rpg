@@ -1,3 +1,4 @@
+#include <iostream>
 #include "buff.h"
 
 Buff::Buff(std::string_view name_param, int strength_buff_param, int intelligence_buff_param, int defence_buff_param, unsigned int duration_param) {
@@ -32,4 +33,12 @@ void Buff::decreaseDuration() {
     if (duration > 0) {
         duration--;
     }
+}
+
+void Buff::print(std::ostream& os) const {
+    os << name << ":"
+        << " str_buff=" << strength_buff
+        << " int_buff=" << intelligence_buff
+        << " def_buff=" << defence_buff
+        << " duration=" << duration;
 }

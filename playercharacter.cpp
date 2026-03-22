@@ -227,7 +227,8 @@ const unsigned int PlayerCharacter::rangedAttack() const {
 }
 
 void PlayerCharacter::print(std::ostream& os) const {
-    const auto& p1_abilities = pcclass->getAbilities();
+    const auto &p_abilities = pcclass->getAbilities();
+    const auto &p_buffs = pcclass->getBuffs();
 
     os << pcclass->getClassName()
         << " - level: " << pcclass->getLevel() << "\n"
@@ -239,11 +240,19 @@ void PlayerCharacter::print(std::ostream& os) const {
         << "- DEF: " << pcclass->getDefence() << "\n"
         << "- Melee attack dmg: " << meleeAttack() << "\n"
         << "- Ranged attack dmg: " << rangedAttack() << "\n"
-        << "- Abilities:" << "\n";
+        << "- Abilities:\n";
     
-    for (const auto& a : p1_abilities) {
+    for (const auto &a : p_abilities) {
         os << "  + "; 
         a.print(os); 
+        os << "\n";
+    }
+
+    os << "- Active buffs:\n";
+
+    for (const auto &b : p_buffs) {
+        os << "  + "; 
+        b.print(os); 
         os << "\n";
     }
 }
