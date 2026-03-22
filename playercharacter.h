@@ -135,6 +135,7 @@ class PlayerCharacter {
 
         void addBuff(const Buff &new_buff) { pcclass->addBuff(new_buff); }
         bool removeBuff(std::string_view buff_name) { return pcclass->removeBuff(buff_name); }
+        void buffTurnPassed() { pcclass->buffTurnPassed(); }
 
         void addAbility(Ability new_ability) { pcclass->addAbility(new_ability); }
         const std::vector<Ability> getAbilities() const { return pcclass->getAbilities(); }

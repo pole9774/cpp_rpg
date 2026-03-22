@@ -57,7 +57,7 @@ void StatBlock::increaseStats(unsigned int strength_param, unsigned int intellig
     intelligence += intelligence_param;
 }
 
-void StatBlock::recalculate_buffs() {
+void StatBlock::recalculateBuffs() {
     total_strength_buff = 0;
     total_intelligence_buff = 0;
     total_defence_buff = 0;
@@ -75,7 +75,7 @@ void StatBlock::addBuff(const Buff &new_buff) {
     }
 
     buffs.push_back(new_buff);
-    recalculate_buffs();
+    recalculateBuffs();
 }
 
 bool StatBlock::removeBuff(std::string_view buff_name) {
@@ -85,9 +85,18 @@ bool StatBlock::removeBuff(std::string_view buff_name) {
     if (it == buffs.end()) return false;
 
     buffs.erase(it);
-    recalculate_buffs();
+    recalculateBuffs();
 
     return true;
+}
+
+void StatBlock::buffTurnPassed() {
+    for (auto &buff : buffs) {
+        buff.decreaseDuration();
+        if (buff.getDuration() == 0) {
+            removeBuff(buff.getName());
+        }
+    }
 }
 
 void StatBlock::modArmorStrength(int str_param) {

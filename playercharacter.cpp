@@ -158,7 +158,7 @@ Warrior::Warrior() : PlayerCharacterDelegate() {
     MP.increaseCurrent(WARRIOR_BASEMP);
     increaseStats(WARRIOR_BASESTR, WARRIOR_BASEINT);
 
-    addAbility(Ability("light attack", 1, 2, TARGET::ENEMY));
+    addAbility(Ability("light attack", 1, 2, TARGET::ENEMY, STAT_MODIFIER::STRENGTH));
 }
 
 std::string Warrior::getClassName() {
@@ -173,7 +173,7 @@ void Warrior::levelUp() {
     increaseStats(WARRIOR_BASESTR, WARRIOR_BASEINT);
 
     if (level == 2) {
-        addAbility(Ability("charged attack", 2, 3, TARGET::ENEMY));
+        addAbility(Ability("charged attack", 2, 3, TARGET::ENEMY, STAT_MODIFIER::STRENGTH));
     }
 }
 
@@ -205,7 +205,7 @@ PlayerCharacter::PlayerCharacter(std::unique_ptr<PlayerCharacterDelegate> pc)
     : pcclass(std::move(pc)) {}
 
 const unsigned int PlayerCharacter::meleeAttack() const {
-    unsigned int attack_dmg = 1;
+    unsigned int attack_dmg = pcclass->getStrength();
     const auto& ids = getEquippedWeapons();
 
     if (ids[(unsigned int)WEAPONSLOT::MELEE] != kInvalidItemId) {
@@ -216,7 +216,7 @@ const unsigned int PlayerCharacter::meleeAttack() const {
 }
 
 const unsigned int PlayerCharacter::rangedAttack() const {
-    unsigned int attack_dmg = 1;
+    unsigned int attack_dmg = pcclass->getStrength();
     const auto& ids = getEquippedWeapons();
 
     if (ids[(unsigned int)WEAPONSLOT::RANGED] != kInvalidItemId) {

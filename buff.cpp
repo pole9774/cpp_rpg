@@ -1,10 +1,11 @@
 #include "buff.h"
 
-Buff::Buff(std::string_view name_param, int strength_buff_param, int intelligence_buff_param, int defence_buff_param) {
+Buff::Buff(std::string_view name_param, int strength_buff_param, int intelligence_buff_param, int defence_buff_param, unsigned int duration_param) {
     name = name_param;
     strength_buff = strength_buff_param;
     intelligence_buff = intelligence_buff_param;
     defence_buff = defence_buff_param;
+    duration = duration_param;
 }
 
 std::string_view Buff::getName() const {
@@ -21,4 +22,14 @@ int Buff::getIntelligenceBuff() const {
 
 int Buff::getDefenceBuff() const {
     return defence_buff;
+}
+
+unsigned int Buff::getDuration() const {
+    return duration;
+}
+
+void Buff::decreaseDuration() {
+    if (duration > 0) {
+        duration--;
+    }
 }

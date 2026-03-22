@@ -25,6 +25,8 @@ class StatBlock {
         void modArmorIntelligence(int int_param);
         void modArmorDefence(int def_param);
 
+        void buffTurnPassed();
+
     protected:
         void increaseStats(unsigned int strength_param, unsigned int intelligence_param);
 
@@ -43,5 +45,5 @@ class StatBlock {
 
         std::vector<Buff> buffs;
 
-        void recalculate_buffs();
+        void recalculateBuffs();
 };

@@ -128,9 +128,9 @@ bool combatAbility(Player &player, Fightable &enemy) {
                 if (player.us.getCurrentMP() >= ability_list[selected_ability].getMpCost()) {
                     player.us.consumeMP(ability_list[selected_ability].getMpCost());
                     if (ability_list[selected_ability].getTarget() == TARGET::SELF) {
-                        player.us.heal(ability_list[selected_ability].getHpEffect());
+                        player.us.heal(ability_list[selected_ability].getHpEffect(player.us.getStrength(), player.us.getIntelligence()));
                     } else {
-                        enemy.monster.takeDamage(ability_list[selected_ability].getHpEffect());
+                        enemy.monster.takeDamage(ability_list[selected_ability].getHpEffect(player.us.getStrength(), player.us.getIntelligence()));
                     }
                     action_used = true;
                 } else {
@@ -354,8 +354,14 @@ void enterFightSequence(Player &player, Fightable &enemy) {
         }
 
         if (enemy.isAlive()) {
-            player.us.takeDamage(enemy.monster.attack());
+            int enemy_damage = enemy.monster.attack() - player.us.getDefence();
+            if (enemy_damage < 1) {
+                enemy_damage = 1;
+            }
+            player.us.takeDamage(enemy_damage);
         }
+
+        player.us.buffTurnPassed();
     }
 
     if (player.isAlive()) {
