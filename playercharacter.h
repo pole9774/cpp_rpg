@@ -133,6 +133,9 @@ class PlayerCharacter {
         
         const std::vector<ItemId>& getBackpack() const { return pcclass->getBackpack(); }
 
+        const ItemId* getEquippedArmor() const { return pcclass->getEquippedArmor(); }
+        const ItemId* getEquippedWeapons() const { return pcclass->getEquippedWeapons(); }
+
         void addBuff(const Buff &new_buff) { pcclass->addBuff(new_buff); }
         bool removeBuff(std::string_view buff_name) { return pcclass->removeBuff(buff_name); }
         void buffTurnPassed() { pcclass->buffTurnPassed(); }
@@ -155,9 +158,6 @@ class PlayerCharacter {
 
         ItemId equipWeapon(ItemId id, unsigned int slot) { return pcclass->equipWeapon(id, slot); }
         bool removeWeapon(unsigned int slot) { return pcclass->removeWeapon(slot); }
-
-        const ItemId* getEquippedArmor() const { return pcclass->getEquippedArmor(); }
-        const ItemId* getEquippedWeapons() const { return pcclass->getEquippedWeapons(); }
 
         void modArmorStrength(int str_param) { pcclass->modArmorStrength(str_param); }
         void modArmorIntelligence(int int_param) { pcclass->modArmorIntelligence(int_param); }

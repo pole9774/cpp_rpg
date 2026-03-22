@@ -282,7 +282,7 @@ ItemId dropRandomItem() {
     } else if (tmp <= 16) {
         created_item = item_manager.createArmor("basic courasse", 2, 0, 6, ARMORSLOT::CHEST);
     } else if (tmp <= 24) {
-        created_item = item_manager.createArmor("basic helm", 1, 0, 3, ARMORSLOT::ARMS);
+        created_item = item_manager.createArmor("basic gloves", 1, 0, 3, ARMORSLOT::ARMS);
     } else if (tmp <= 32) {
         created_item = item_manager.createArmor("basic pants", 1, 0, 5, ARMORSLOT::LEGS);
     } else if (tmp <= 40) {
