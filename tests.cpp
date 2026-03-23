@@ -264,7 +264,53 @@ TEST_CASE("Warrior_abilities") {
     CHECK(abilities3.at(2).getTarget() == TARGET::SELF);
 }
 
+TEST_CASE("Warrior_buffs") {
+    PlayerCharacter p_warrior = PlayerCharacter(std::make_unique<Warrior>());
+
+    Buff b1 = Buff("golden vow", 4, 2, 3, 2);
+    Buff b2 = Buff("power within", 5, 4, -2, 3);
+
+    p_warrior.addBuff(b1);
+    CHECK(p_warrior.getBaseStrength() == WARRIOR_BASESTR);
+    CHECK(p_warrior.getStrength() == WARRIOR_BASESTR + 4);
+    CHECK(p_warrior.getBaseIntelligence() == WARRIOR_BASEINT);
+    CHECK(p_warrior.getIntelligence() == WARRIOR_BASEINT + 2);
+    CHECK(p_warrior.getBaseDefence() == 0);
+    CHECK(p_warrior.getDefence() == 3);
+
+    p_warrior.addBuff(b2);
+    CHECK(p_warrior.getBaseStrength() == WARRIOR_BASESTR);
+    CHECK(p_warrior.getStrength() == WARRIOR_BASESTR + 4 + 5);
+    CHECK(p_warrior.getBaseIntelligence() == WARRIOR_BASEINT);
+    CHECK(p_warrior.getIntelligence() == WARRIOR_BASEINT + 2 + 4);
+    CHECK(p_warrior.getBaseDefence() == 0);
+    CHECK(p_warrior.getDefence() == 3 - 2);
+
+    p_warrior.buffTurnPassed();  // b1_dur = 1, b2_dur = 2
+    CHECK(p_warrior.getBaseStrength() == WARRIOR_BASESTR);
+    CHECK(p_warrior.getStrength() == WARRIOR_BASESTR + 4 + 5);
+    CHECK(p_warrior.getBaseIntelligence() == WARRIOR_BASEINT);
+    CHECK(p_warrior.getIntelligence() == WARRIOR_BASEINT + 2 + 4);
+    CHECK(p_warrior.getBaseDefence() == 0);
+    CHECK(p_warrior.getDefence() == 3 - 2);
+
+    p_warrior.buffTurnPassed();  // b1_dur = 0 (removed), b2_dur = 1
+    CHECK(p_warrior.getBaseStrength() == WARRIOR_BASESTR);
+    CHECK(p_warrior.getStrength() == WARRIOR_BASESTR + 5);
+    CHECK(p_warrior.getBaseIntelligence() == WARRIOR_BASEINT);
+    CHECK(p_warrior.getIntelligence() == WARRIOR_BASEINT + 4);
+    CHECK(p_warrior.getBaseDefence() == 0);
+    CHECK(p_warrior.getDefence() == 0);
+
+    p_warrior.buffTurnPassed();  // b2_dur = 0 (removed)
+    CHECK(p_warrior.getBaseStrength() == WARRIOR_BASESTR);
+    CHECK(p_warrior.getStrength() == WARRIOR_BASESTR);
+    CHECK(p_warrior.getBaseIntelligence() == WARRIOR_BASEINT);
+    CHECK(p_warrior.getIntelligence() == WARRIOR_BASEINT);
+    CHECK(p_warrior.getBaseDefence() == 0);
+    CHECK(p_warrior.getDefence() == 0);
+}
+
 // TODO:
-// - Warrior buffs
 // - Repeat for other classes
 // - Monster
