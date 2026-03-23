@@ -20,7 +20,7 @@ TEST_CASE("Warrior_creation") {
     CHECK(p_warrior.getLevel() == 1);
     CHECK(p_warrior.getEXP() == 0);
     CHECK(p_warrior.getEXPToNextLevel() == EXP_FOR_LEVEL2);
-    CHECK(p_warrior.getClassName() == "Warrior");
+    CHECK(p_warrior.getClassName() == "warrior");
 }
 
 TEST_CASE("Warrior_levelup") {
@@ -229,8 +229,42 @@ TEST_CASE("Warrior_potions") {
     CHECK(backpack6.size() == 1);
 }
 
+TEST_CASE("Warrior_abilities") {
+    PlayerCharacter p_warrior = PlayerCharacter(std::make_unique<Warrior>());
+
+    auto abilities = p_warrior.getAbilities();
+    CHECK(abilities.size() == 1);
+    CHECK(abilities.at(0).getName() == "light attack");
+    CHECK(abilities.at(0).getMpCost() == 1);
+    CHECK(abilities.at(0).getBaseHpEffect() == 2);
+    CHECK(abilities.at(0).getHpEffect(p_warrior.getStrength(), p_warrior.getIntelligence()) == (2 + WARRIOR_BASESTR));
+    CHECK(abilities.at(0).getTarget() == TARGET::ENEMY);
+
+    p_warrior.gainExp(100);
+    auto abilities2 = p_warrior.getAbilities();
+    CHECK(p_warrior.getLevel() == 2);
+    CHECK(abilities2.size() == 2);
+    CHECK(abilities2.at(0).getName() == "light attack");
+    CHECK(abilities2.at(1).getName() == "charged attack");
+    CHECK(abilities2.at(1).getMpCost() == 2);
+    CHECK(abilities2.at(1).getBaseHpEffect() == 3);
+    CHECK(abilities2.at(1).getHpEffect(p_warrior.getStrength(), p_warrior.getIntelligence()) == (3 + 2 * WARRIOR_BASESTR));
+    CHECK(abilities2.at(1).getTarget() == TARGET::ENEMY);
+
+    p_warrior.gainExp(100);
+    auto abilities3 = p_warrior.getAbilities();
+    CHECK(p_warrior.getLevel() == 3);
+    CHECK(abilities3.size() == 3);
+    CHECK(abilities3.at(0).getName() == "light attack");
+    CHECK(abilities3.at(1).getName() == "charged attack");
+    CHECK(abilities3.at(2).getName() == "heal surge");
+    CHECK(abilities3.at(2).getMpCost() == 3);
+    CHECK(abilities3.at(2).getBaseHpEffect() == 9);
+    CHECK(abilities3.at(2).getHpEffect(p_warrior.getStrength(), p_warrior.getIntelligence()) == 9);
+    CHECK(abilities3.at(2).getTarget() == TARGET::SELF);
+}
+
 // TODO:
-// - Warrior abilities
 // - Warrior buffs
 // - Repeat for other classes
 // - Monster

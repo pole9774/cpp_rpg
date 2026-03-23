@@ -137,7 +137,7 @@ Cleric::Cleric() : PlayerCharacterDelegate() {
 }
 
 std::string Cleric::getClassName() {
-    return std::string("Cleric");
+    return std::string("cleric");
 }
 
 void Cleric::levelUp() {
@@ -162,7 +162,7 @@ Warrior::Warrior() : PlayerCharacterDelegate() {
 }
 
 std::string Warrior::getClassName() {
-    return std::string("Warrior");
+    return std::string("warrior");
 }
 
 void Warrior::levelUp() {
@@ -174,6 +174,8 @@ void Warrior::levelUp() {
 
     if (level == 2) {
         addAbility(Ability("charged attack", 2, 3, TARGET::ENEMY, STAT_MODIFIER::STRENGTH));
+    } else if (level == 3) {
+        addAbility(Ability("heal surge", 3, 9, TARGET::SELF, STAT_MODIFIER::NONE));
     }
 }
 
@@ -189,7 +191,7 @@ Wizard::Wizard() : PlayerCharacterDelegate() {
 }
 
 std::string Wizard::getClassName() {
-    return std::string("Wizard");
+    return std::string("wizard");
 }
 
 void Wizard::levelUp() {
