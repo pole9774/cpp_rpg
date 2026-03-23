@@ -24,6 +24,44 @@ TEST_CASE("Warrior_creation") {
     CHECK(p_warrior.getClassName() == "warrior");
 }
 
+TEST_CASE("Cleric_creation") {
+    PlayerCharacter p_cleric = PlayerCharacter(std::make_unique<Cleric>());
+
+    CHECK(p_cleric.getCurrentHP() == CLERIC_BASEHP);
+    CHECK(p_cleric.getCurrentMP() == CLERIC_BASEMP);
+    CHECK(p_cleric.getMaxHP() == CLERIC_BASEHP);
+    CHECK(p_cleric.getMaxMP() == CLERIC_BASEMP);
+    CHECK(p_cleric.getBaseStrength() == CLERIC_BASESTR);
+    CHECK(p_cleric.getStrength() == CLERIC_BASESTR);
+    CHECK(p_cleric.getBaseIntelligence() == CLERIC_BASEINT);
+    CHECK(p_cleric.getIntelligence() == CLERIC_BASEINT);
+    CHECK(p_cleric.getBaseDefence() == 0);
+    CHECK(p_cleric.getDefence() == 0);
+    CHECK(p_cleric.getLevel() == 1);
+    CHECK(p_cleric.getEXP() == 0);
+    CHECK(p_cleric.getEXPToNextLevel() == EXP_FOR_LEVEL2);
+    CHECK(p_cleric.getClassName() == "cleric");
+}
+
+TEST_CASE("Wizard_creation") {
+    PlayerCharacter p_wizard = PlayerCharacter(std::make_unique<Wizard>());
+
+    CHECK(p_wizard.getCurrentHP() == WIZARD_BASEHP);
+    CHECK(p_wizard.getCurrentMP() == WIZARD_BASEMP);
+    CHECK(p_wizard.getMaxHP() == WIZARD_BASEHP);
+    CHECK(p_wizard.getMaxMP() == WIZARD_BASEMP);
+    CHECK(p_wizard.getBaseStrength() == WIZARD_BASESTR);
+    CHECK(p_wizard.getStrength() == WIZARD_BASESTR);
+    CHECK(p_wizard.getBaseIntelligence() == WIZARD_BASEINT);
+    CHECK(p_wizard.getIntelligence() == WIZARD_BASEINT);
+    CHECK(p_wizard.getBaseDefence() == 0);
+    CHECK(p_wizard.getDefence() == 0);
+    CHECK(p_wizard.getLevel() == 1);
+    CHECK(p_wizard.getEXP() == 0);
+    CHECK(p_wizard.getEXPToNextLevel() == EXP_FOR_LEVEL2);
+    CHECK(p_wizard.getClassName() == "wizard");
+}
+
 TEST_CASE("Warrior_levelup") {
     PlayerCharacter p_warrior = PlayerCharacter(std::make_unique<Warrior>());
 
@@ -68,6 +106,70 @@ TEST_CASE("Warrior_levelup") {
     CHECK(p_warrior.getStrength() == 20);
     CHECK(p_warrior.getBaseIntelligence() == 8);
     CHECK(p_warrior.getIntelligence() == 8);
+}
+
+TEST_CASE("Cleric_levelup") {
+    PlayerCharacter p_cleric = PlayerCharacter(std::make_unique<Cleric>());
+
+    p_cleric.gainExp(100);
+
+    CHECK(p_cleric.getEXP() == 100);
+    CHECK(p_cleric.getLevel() == 2);
+    CHECK(p_cleric.getEXPToNextLevel() == 200);
+    CHECK(p_cleric.getCurrentHP() == 22);
+    CHECK(p_cleric.getCurrentMP() == 30);
+    CHECK(p_cleric.getMaxHP() == 22);
+    CHECK(p_cleric.getMaxMP() == 30);
+    CHECK(p_cleric.getBaseStrength() == 6);
+    CHECK(p_cleric.getStrength() == 6);
+    CHECK(p_cleric.getBaseIntelligence() == 8);
+    CHECK(p_cleric.getIntelligence() == 8);
+
+    p_cleric.gainExp(150);
+
+    CHECK(p_cleric.getEXP() == 250);
+    CHECK(p_cleric.getLevel() == 3);
+    CHECK(p_cleric.getEXPToNextLevel() == 400);
+    CHECK(p_cleric.getCurrentHP() == 29);
+    CHECK(p_cleric.getCurrentMP() == 40);
+    CHECK(p_cleric.getMaxHP() == 29);
+    CHECK(p_cleric.getMaxMP() == 40);
+    CHECK(p_cleric.getBaseStrength() == 9);
+    CHECK(p_cleric.getStrength() == 9);
+    CHECK(p_cleric.getBaseIntelligence() == 12);
+    CHECK(p_cleric.getIntelligence() == 12);
+}
+
+TEST_CASE("Wizard_levelup") {
+    PlayerCharacter p_wizard = PlayerCharacter(std::make_unique<Wizard>());
+
+    p_wizard.gainExp(100);
+
+    CHECK(p_wizard.getEXP() == 100);
+    CHECK(p_wizard.getLevel() == 2);
+    CHECK(p_wizard.getEXPToNextLevel() == 200);
+    CHECK(p_wizard.getCurrentHP() == 15);
+    CHECK(p_wizard.getCurrentMP() == 45);
+    CHECK(p_wizard.getMaxHP() == 15);
+    CHECK(p_wizard.getMaxMP() == 45);
+    CHECK(p_wizard.getBaseStrength() == 2);
+    CHECK(p_wizard.getStrength() == 2);
+    CHECK(p_wizard.getBaseIntelligence() == 14);
+    CHECK(p_wizard.getIntelligence() == 14);
+
+    p_wizard.gainExp(150);
+
+    CHECK(p_wizard.getEXP() == 250);
+    CHECK(p_wizard.getLevel() == 3);
+    CHECK(p_wizard.getEXPToNextLevel() == 400);
+    CHECK(p_wizard.getCurrentHP() == 20);
+    CHECK(p_wizard.getCurrentMP() == 60);
+    CHECK(p_wizard.getMaxHP() == 20);
+    CHECK(p_wizard.getMaxMP() == 60);
+    CHECK(p_wizard.getBaseStrength() == 3);
+    CHECK(p_wizard.getStrength() == 3);
+    CHECK(p_wizard.getBaseIntelligence() == 21);
+    CHECK(p_wizard.getIntelligence() == 21);
 }
 
 TEST_CASE("Warrior_armor") {
@@ -263,6 +365,52 @@ TEST_CASE("Warrior_abilities") {
     CHECK(abilities3.at(2).getBaseHpEffect() == 9);
     CHECK(abilities3.at(2).getHpEffect(p_warrior.getStrength(), p_warrior.getIntelligence()) == 9);
     CHECK(abilities3.at(2).getTarget() == TARGET::SELF);
+}
+
+TEST_CASE("Cleric_abilities") {
+    PlayerCharacter p_cleric = PlayerCharacter(std::make_unique<Cleric>());
+
+    auto abilities = p_cleric.getAbilities();
+    CHECK(abilities.size() == 1);
+    CHECK(abilities.at(0).getName() == "self heal");
+    CHECK(abilities.at(0).getMpCost() == 2);
+    CHECK(abilities.at(0).getBaseHpEffect() == 5);
+    CHECK(abilities.at(0).getHpEffect(p_cleric.getStrength(), p_cleric.getIntelligence()) == (5 + CLERIC_BASEINT));
+    CHECK(abilities.at(0).getTarget() == TARGET::SELF);
+
+    p_cleric.gainExp(100);
+    auto abilities2 = p_cleric.getAbilities();
+    CHECK(p_cleric.getLevel() == 2);
+    CHECK(abilities2.size() == 2);
+    CHECK(abilities2.at(0).getName() == "self heal");
+    CHECK(abilities2.at(1).getName() == "sacred blade");
+    CHECK(abilities2.at(1).getMpCost() == 4);
+    CHECK(abilities2.at(1).getBaseHpEffect() == 4);
+    CHECK(abilities2.at(1).getHpEffect(p_cleric.getStrength(), p_cleric.getIntelligence()) == (4 + 2 * CLERIC_BASEINT));
+    CHECK(abilities2.at(1).getTarget() == TARGET::ENEMY);
+}
+
+TEST_CASE("Wizard_abilities") {
+    PlayerCharacter p_wizard = PlayerCharacter(std::make_unique<Wizard>());
+
+    auto abilities = p_wizard.getAbilities();
+    CHECK(abilities.size() == 1);
+    CHECK(abilities.at(0).getName() == "lightning bolt");
+    CHECK(abilities.at(0).getMpCost() == 2);
+    CHECK(abilities.at(0).getBaseHpEffect() == 3);
+    CHECK(abilities.at(0).getHpEffect(p_wizard.getStrength(), p_wizard.getIntelligence()) == (3 + WIZARD_BASEINT));
+    CHECK(abilities.at(0).getTarget() == TARGET::ENEMY);
+
+    p_wizard.gainExp(100);
+    auto abilities2 = p_wizard.getAbilities();
+    CHECK(p_wizard.getLevel() == 2);
+    CHECK(abilities2.size() == 2);
+    CHECK(abilities2.at(0).getName() == "lightning bolt");
+    CHECK(abilities2.at(1).getName() == "fire ball");
+    CHECK(abilities2.at(1).getMpCost() == 5);
+    CHECK(abilities2.at(1).getBaseHpEffect() == 6);
+    CHECK(abilities2.at(1).getHpEffect(p_wizard.getStrength(), p_wizard.getIntelligence()) == (6 + 2 * WIZARD_BASEINT));
+    CHECK(abilities2.at(1).getTarget() == TARGET::ENEMY);
 }
 
 TEST_CASE("Warrior_buffs") {

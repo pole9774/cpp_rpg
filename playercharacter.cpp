@@ -134,6 +134,8 @@ Cleric::Cleric() : PlayerCharacterDelegate() {
     MP.setMax(CLERIC_BASEMP);
     MP.increaseCurrent(CLERIC_BASEMP);
     increaseStats(CLERIC_BASESTR, CLERIC_BASEINT);
+
+    addAbility(Ability("self heal", 2, 5, TARGET::SELF, STAT_MODIFIER::INTELLIGENCE));
 }
 
 std::string Cleric::getClassName() {
@@ -146,6 +148,10 @@ void Cleric::levelUp() {
     MP.setMax((unsigned int)(CLERIC_BASEMP / 2.0) + MP.getMax());
     MP.increaseCurrent((unsigned int)(CLERIC_BASEMP / 2.0));
     increaseStats(CLERIC_BASESTR, CLERIC_BASEINT);
+
+    if (level == 2) {
+        addAbility(Ability("sacred blade", 4, 4, TARGET::ENEMY, STAT_MODIFIER::INTELLIGENCE));
+    }
 }
 
 
@@ -188,6 +194,8 @@ Wizard::Wizard() : PlayerCharacterDelegate() {
     MP.setMax(WIZARD_BASEMP);
     MP.increaseCurrent(WIZARD_BASEMP);
     increaseStats(WIZARD_BASESTR, WIZARD_BASEINT);
+
+    addAbility(Ability("lightning bolt", 2, 3, TARGET::ENEMY, STAT_MODIFIER::INTELLIGENCE));
 }
 
 std::string Wizard::getClassName() {
@@ -200,6 +208,10 @@ void Wizard::levelUp() {
     MP.setMax((unsigned int)(WIZARD_BASEMP / 2.0) + MP.getMax());
     MP.increaseCurrent((unsigned int)(WIZARD_BASEMP / 2.0));
     increaseStats(WIZARD_BASESTR, WIZARD_BASEINT);
+
+    if (level == 2) {
+        addAbility(Ability("fire ball", 5, 6, TARGET::ENEMY, STAT_MODIFIER::INTELLIGENCE));
+    }
 }
 
 
