@@ -3,6 +3,7 @@
 
 #include "playercharacter.h"
 #include "itemmanager.h"
+#include "monster.h"
 
 TEST_CASE("Warrior_creation") {
     PlayerCharacter p_warrior = PlayerCharacter(std::make_unique<Warrior>());
@@ -311,6 +312,19 @@ TEST_CASE("Warrior_buffs") {
     CHECK(p_warrior.getDefence() == 0);
 }
 
-// TODO:
-// - Repeat for other classes
-// - Monster
+TEST_CASE("Monster") {
+    Monster monster("goblin", 15, 5);
+
+    CHECK(monster.getCurrentHP() == 15);
+    CHECK(monster.getMaxHP() == 15);
+
+    monster.takeDamage(7);
+    CHECK(monster.getCurrentHP() == 8);
+    CHECK(monster.getMaxHP() == 15);
+
+    CHECK(monster.attack() == 5);
+
+    monster.takeDamage(11);
+    CHECK(monster.getCurrentHP() == 0);
+    CHECK(monster.getMaxHP() == 15);
+}
