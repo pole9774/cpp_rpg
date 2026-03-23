@@ -328,7 +328,7 @@ void enterFightSequence(Player &player, Fightable &enemy) {
 
             std::cout << "Player vs Monster\n\n";
             displayCharacterInfo(player);
-            std::cout << "\n\n-------------------\n\n";
+            std::cout << "\n---------------------\n\n";
             enemy.monster.print(std::cout);
 
             std::cout << "\nmeele attack (m), ranged attack (r), inventory (i), ability (a): ";
@@ -365,8 +365,14 @@ void enterFightSequence(Player &player, Fightable &enemy) {
         player.us.buffTurnPassed();
     }
 
+    system("CLS");
+    std::cout << "Player vs Monster\n\n";
+    displayCharacterInfo(player);
+    std::cout << "\n---------------------\n\n";
+    enemy.monster.print(std::cout);
+
     if (player.isAlive()) {
-        std::cout << "You won against the monster!\n";
+        std::cout << "\nYou won against the monster!\n";
         player.us.gainExp(enemy.exp_worth);
         std::cout << "You gained " << enemy.exp_worth << " exp!\n";
         monsters_defeated++;
