@@ -300,18 +300,19 @@ Fightable replaceEnemy() {
     static std::mt19937 gen(std::random_device{}());
     static std::uniform_int_distribution<int> dist(1, 4);
     int tmp = dist(gen);
+    unsigned int scaling = (monsters_defeated / 4) + 1;
 
     if (tmp == 1) {
-        Fightable goblin("goblin", 6, 1);
+        Fightable goblin("goblin", 5 * scaling, 1 * scaling);
         return goblin;
     } else if (tmp == 2) {
-        Fightable orc("orc", 7, 1);
+        Fightable orc("orc", 6 * scaling, 2 * scaling);
         return orc;
     } else if (tmp == 3) {
-        Fightable zombie("zombie", 7, 1);
+        Fightable zombie("zombie", 7 * scaling, 1 * scaling);
         return zombie;
     } else {
-        Fightable dragon("dragon", 8, 1);
+        Fightable dragon("dragon", 10 * scaling, 3 * scaling);
         return dragon;
     }
 }
